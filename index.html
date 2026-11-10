@@ -170,6 +170,276 @@ form.contact [aria-invalid="true"]{border-color:#ff7b8a}
 @keyframes alit{0%,14%{stroke:var(--cy);fill:color-mix(in srgb,var(--cy) 16%,var(--card));stroke-width:2.5}26%,100%{}}
 .arnote{max-width:70ch;margin:14px auto 0;text-align:center;color:var(--mute);font-size:.95rem;min-height:44px}
 @media (prefers-reduced-motion:reduce){.anode rect,.aln{animation:none}}
+
+/* Animated project timeline */
+#process{position:relative;isolation:isolate}
+#process .process-steps{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:48px 0 0;counter-reset:s;}
+#process .process-steps::before{content:"";position:absolute;z-index:-1;left:8%;right:8%;top:35px;height:2px;background:linear-gradient(90deg,var(--cy),var(--vi),var(--cy));background-size:200% 100%;opacity:.48;animation:processRail 7s linear infinite}
+#process .process-step{position:relative;min-width:0;min-height:252px;padding:78px 22px 22px;border:1px solid color-mix(in srgb,var(--cy) 18%,var(--line));border-radius:18px;background:linear-gradient(155deg,color-mix(in srgb,var(--cy) 7%,var(--card)),var(--card) 58%,color-mix(in srgb,var(--vi) 7%,var(--card)));overflow:hidden;box-shadow:0 12px 34px #0002;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1),border-color .3s,box-shadow .3s;}
+#process .process-step::before{content:counter(s,decimal-leading-zero);position:absolute;top:17px;right:20px;margin:0;font:700 2.35rem/1 "JetBrains Mono",monospace;color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--cy) 80%,transparent);opacity:.9;}
+#process .process-step .step-node{position:absolute;z-index:2;top:27px;left:22px;width:17px;height:17px;border:2px solid var(--cy);border-radius:50%;background:var(--bg);box-shadow:0 0 0 5px color-mix(in srgb,var(--cy) 9%,transparent),0 0 18px color-mix(in srgb,var(--cy) 48%,transparent);}
+#process .process-step .step-node::after{content:"";position:absolute;inset:-7px;border:1px solid color-mix(in srgb,var(--cy) 45%,transparent);border-radius:50%;animation:stepPulse 2.8s ease-out infinite;}
+#process .step-kicker{display:block;margin-bottom:13px;color:var(--cy);font:500 .68rem/1.4 "JetBrains Mono",monospace;letter-spacing:.12em;}
+#process .process-step h3{position:relative;margin:0 0 10px;font-size:1.28rem;letter-spacing:-.02em;}
+#process .process-step p{position:relative;margin:0;color:var(--mute);font-size:.94rem;line-height:1.7;}
+#process .step-footer{display:block;margin-top:23px;padding-top:13px;border-top:1px solid var(--line);color:var(--mute);font:500 .62rem/1.4 "JetBrains Mono",monospace;letter-spacing:.08em;}
+#process .process-step:hover{transform:translateY(-8px);border-color:var(--cy);box-shadow:0 20px 48px color-mix(in srgb,var(--cy) 13%,#000);}
+#process .process-step:nth-child(2) .step-node{border-color:var(--vi);box-shadow:0 0 0 5px color-mix(in srgb,var(--vi) 9%,transparent),0 0 18px color-mix(in srgb,var(--vi) 48%,transparent)}
+#process .process-step:nth-child(3) .step-node{border-color:#54e6ad;box-shadow:0 0 0 5px #54e6ad17,0 0 18px #54e6ad77}
+#process .process-step:nth-child(4) .step-node{border-color:#ffbd69;box-shadow:0 0 0 5px #ffbd6917,0 0 18px #ffbd6977}
+#process .process-steps.reveal-enabled .process-step{opacity:0;transform:translateY(30px) scale(.985);}
+#process .process-steps.reveal-enabled .process-step.is-visible{opacity:1;transform:translateY(0) scale(1);}
+#process .process-steps.reveal-enabled .process-step.is-visible:hover{transform:translateY(-8px) scale(1.01);}
+#process .process-step:nth-child(2){transition-delay:.10s}
+#process .process-step:nth-child(3){transition-delay:.20s}
+#process .process-step:nth-child(4){transition-delay:.30s}
+@keyframes stepPulse{0%{transform:scale(.72);opacity:.8}75%,100%{transform:scale(1.55);opacity:0}}
+@keyframes processRail{to{background-position:200% 0}}
+@media(max-width:1000px){#process .process-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}#process .process-steps::before{display:none}}
+@media(max-width:620px){#process .process-steps{grid-template-columns:1fr;gap:13px;margin-top:30px}#process .process-step{min-height:0;padding:70px 20px 20px}#process .step-footer{margin-top:18px}}
+@media(prefers-reduced-motion:reduce){#process .process-steps::before,#process .step-node::after{animation:none!important}#process .process-step,#process .process-steps.reveal-enabled .process-step{opacity:1!important;transform:none!important;transition:none!important}}
+
+
+/* Services: asymmetric product showcase */
+#services .service-mosaic{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;margin-top:28px;}
+#services .service-card{--accent:var(--cy);--accent-rgb:39,225,255;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(210px,.98fr);gap:18px;align-items:center;min-width:0;min-height:330px;padding:24px;border:1px solid color-mix(in srgb,var(--accent) 23%,var(--line));border-radius:22px;overflow:hidden;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 9%,var(--card)),color-mix(in srgb,var(--card) 96%,transparent) 48%,color-mix(in srgb,var(--accent) 5%,var(--card)));box-shadow:0 18px 46px #0002;transition:transform .35s cubic-bezier(.2,.75,.25,1),border-color .3s,box-shadow .35s;}
+#services .service-card:nth-child(1){grid-column:span 7;}
+#services .service-card:nth-child(2){grid-column:span 5;}
+#services .service-card:nth-child(3){grid-column:span 5;}
+#services .service-card:nth-child(4){grid-column:span 7;}
+#services .service-card::before{content:"";position:absolute;z-index:-1;width:260px;height:260px;right:-95px;top:-115px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 20%,transparent),transparent 68%);filter:blur(8px);opacity:.7;transition:transform .6s,opacity .4s;}
+#services .service-card::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:0;background:radial-gradient(360px circle at var(--mx,80%) var(--my,30%),color-mix(in srgb,var(--accent) 15%,transparent),transparent 65%);transition:opacity .35s;}
+#services .service-card:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--accent) 70%,var(--line));box-shadow:0 26px 60px color-mix(in srgb,var(--accent) 11%,#000);}
+#services .service-card:hover::before{transform:scale(1.28);opacity:1;}
+#services .service-card:hover::after{opacity:1;}
+#services .service-backend{--accent:#9b8cff;--accent-rgb:155,140,255;}
+#services .service-dashboard{--accent:#55e6b0;--accent-rgb:85,230,176;}
+#services .service-marketplace{--accent:#ffbd69;--accent-rgb:255,189,105;}
+#services .service-copy{position:relative;z-index:1;min-width:0;}
+#services .service-kicker{display:flex;align-items:center;gap:9px;margin-bottom:17px;color:var(--accent);font:500 .66rem/1.4 "JetBrains Mono",monospace;letter-spacing:.11em;}
+#services .service-kicker-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 13px var(--accent);}
+#services .service-copy h3{margin:0 0 9px;font-size:clamp(1.25rem,2vw,1.65rem);line-height:1.15;letter-spacing:-.035em;}
+#services .service-copy p{max-width:39ch;margin:0 0 15px;color:var(--mute);font-size:.92rem;line-height:1.65;}
+#services .service-copy .ticks{margin:0;padding:0;list-style:none;display:grid;gap:7px;color:var(--mute);font-size:.83rem;}
+#services .service-copy .ticks li::before{content:"↗";margin-right:9px;color:var(--accent);font-weight:700;}
+#services .service-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;}
+#services .service-tags span{padding:5px 9px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--mute);font:500 .64rem/1.4 "JetBrains Mono",monospace;}
+#services .service-visual{position:relative;z-index:1;min-width:0;}
+#services .mock-window{position:relative;min-height:220px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:15px;overflow:hidden;background:color-mix(in srgb,var(--bg) 90%,transparent);box-shadow:0 15px 35px #0004;transform:perspective(900px) rotateY(-4deg) rotateX(2deg);transition:transform .45s cubic-bezier(.2,.75,.25,1),box-shadow .45s;}
+#services .service-card:hover .mock-window{transform:perspective(900px) rotateY(0) rotateX(0) translateY(-3px);box-shadow:0 20px 42px #0006,0 0 28px color-mix(in srgb,var(--accent) 13%,transparent);}
+#services .mock-bar{height:34px;display:flex;align-items:center;gap:9px;padding:0 10px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--card) 96%,transparent);color:var(--mute);font:500 .58rem/1 "JetBrains Mono",monospace;white-space:nowrap;}
+#services .mock-bar b{margin-left:auto;color:var(--accent);font-size:.52rem;letter-spacing:.06em;}
+#services .mock-dots{display:flex;gap:4px;}
+#services .mock-dots i{width:6px;height:6px;border-radius:50%;background:var(--mute);opacity:.45;}
+/* Phone UI preview */
+#services .phone-stage{display:grid;place-items:center;min-height:220px;padding:12px;background:radial-gradient(ellipse at 50% 60%,color-mix(in srgb,var(--accent) 17%,transparent),transparent 68%);}
+#services .phone-shell{width:145px;padding:5px;border:1px solid #65758f;border-radius:22px;background:#0a1020;box-shadow:0 12px 28px #0008;transform:rotate(-5deg);transition:transform .5s;}
+#services .service-card:hover .phone-shell{transform:rotate(0) translateY(-3px);}
+#services .phone-notch{width:43px;height:8px;margin:0 auto 3px;border-radius:0 0 8px 8px;background:#03060c;}
+#services .phone-screen{min-height:178px;padding:8px;border-radius:15px;background:linear-gradient(155deg,#17243b,#0d1424);color:#e8f0ff;font-family:"Space Grotesk",sans-serif;}
+#services .phone-status{display:flex;justify-content:space-between;font:500 6px "JetBrains Mono",monospace;color:#8da0bd;}
+#services .phone-greeting{display:flex;justify-content:space-between;margin-top:10px;font-size:7px;color:#9eabc3;}
+#services .phone-greeting b{color:var(--accent);}
+#services .phone-title{margin:3px 0 9px;font-size:10px;font-weight:700;line-height:1.25;}
+#services .phone-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;}
+#services .phone-tiles span{display:grid;gap:4px;padding:7px 6px;border:1px solid #34415b;border-radius:7px;background:#1a2941;font-size:6px;color:#aebdd4;}
+#services .phone-tiles i{font-style:normal;font-size:12px;color:var(--accent);}
+#services .phone-feature{display:grid;gap:3px;margin-top:7px;padding:7px;border:1px solid #3a4a65;border-radius:7px;background:#121e32;}
+#services .phone-feature small{font:500 5px "JetBrains Mono",monospace;color:var(--accent);}
+#services .phone-feature b{font-size:7px;}
+#services .phone-feature span{height:3px;width:68%;border-radius:4px;background:linear-gradient(90deg,var(--accent),#8a6bff);}
+#services .phone-nav{display:flex;justify-content:space-around;margin-top:8px;color:#8194b2;}
+#services .phone-nav i{width:9px;height:4px;border-radius:5px;background:var(--accent);opacity:.8;}
+/* API response preview */
+#services .api-body{padding:18px 14px 14px;}
+#services .api-route{display:flex;align-items:center;gap:7px;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--card) 90%,transparent);font:500 .57rem "JetBrains Mono",monospace;}
+#services .api-route small{padding:4px 5px;border-radius:4px;background:#173d35;color:#62e9b5;font-size:.51rem;}
+#services .api-route strong{overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
+#services .api-route em{margin-left:auto;color:#62e9b5;font-size:.51rem;font-style:normal;white-space:nowrap;}
+#services .api-code{margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:8px;background:#080d18;color:#c8d3e6;font-size:.62rem;line-height:1.8;}
+#services .api-muted{color:#63738f;}
+#services .api-key{color:#9d8cff;}
+#services .api-value{color:#67dfae;}
+#services .api-flow{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-top:13px;color:var(--mute);font:500 .49rem "JetBrains Mono",monospace;}
+#services .api-flow i{height:1px;flex:1;background:linear-gradient(90deg,var(--accent),transparent);}
+/* Dashboard preview */
+#services .dashboard-body{padding:14px;}
+#services .dash-heading{display:flex;justify-content:space-between;color:var(--ink);font-size:.66rem;font-weight:700;}
+#services .dash-heading i{color:var(--mute);font-style:normal;letter-spacing:2px;}
+#services .dash-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px;}
+#services .dash-stat-row div{display:grid;gap:5px;padding:9px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--card) 90%,transparent);}
+#services .dash-stat-row small,#services .dash-chart-head small{color:var(--mute);font:500 .48rem "JetBrains Mono",monospace;letter-spacing:.05em;}
+#services .dash-stat-row b{font:700 1.05rem "Space Grotesk",sans-serif;color:var(--ink);letter-spacing:.12em;}
+#services .dash-trend{color:var(--accent);font:500 .47rem "JetBrains Mono",monospace;}
+#services .dash-trend.purple{color:#a797ff;}
+#services .dash-chart-head{display:flex;justify-content:space-between;align-items:center;margin-top:13px;color:var(--ink);font-size:.62rem;font-weight:700;}
+#services .dash-chart{height:66px;display:flex;align-items:end;gap:6px;margin-top:7px;padding:7px 8px 0;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent 0 20px,#253149 21px 22px);}
+#services .dash-chart i{flex:1;min-width:0;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 35%,#5863a8));opacity:.88;transform-origin:bottom;animation:serviceBars 2.6s ease-in-out infinite alternate;}
+#services .dash-chart i:nth-child(even){animation-delay:.3s;}
+#services .dash-chart-labels{display:flex;justify-content:space-around;margin-top:5px;color:var(--mute);font:500 .48rem "JetBrains Mono",monospace;}
+@keyframes serviceBars{from{transform:scaleY(.78);opacity:.65}to{transform:scaleY(1);opacity:1}}
+/* Marketplace flow preview */
+#services .market-body{padding:15px 12px;}
+#services .market-node{display:flex;align-items:center;gap:9px;max-width:180px;margin:auto;padding:9px;border:1px solid color-mix(in srgb,var(--accent) 27%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--card) 96%,transparent);}
+#services .market-node>span{display:grid;place-items:center;flex:none;width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--accent) 17%,transparent);color:var(--accent);font:700 .7rem "JetBrains Mono",monospace;}
+#services .market-node div{display:grid;gap:2px;min-width:0;}
+#services .market-node b{font-size:.65rem;color:var(--ink);}
+#services .market-node small{font-size:.52rem;color:var(--mute);}
+#services .market-connector{display:flex;align-items:center;justify-content:center;gap:7px;height:27px;color:var(--accent);font:500 .48rem "JetBrains Mono",monospace;}
+#services .market-connector i{width:1px;height:12px;background:var(--accent);opacity:.6;}
+#services .market-middle{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+#services .market-middle .market-node{width:100%;padding:7px 6px;gap:6px;}
+#services .market-middle .market-node>span{width:22px;height:22px;}
+#services .market-live{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:13px;padding:7px;border:1px dashed color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:7px;color:var(--mute);font:500 .49rem "JetBrains Mono",monospace;letter-spacing:.05em;}
+#services .market-live i{width:6px;height:6px;border-radius:50%;background:#59e4a9;box-shadow:0 0 10px #59e4a9;}
+@media(max-width:1050px){#services .service-card{grid-column:span 6!important;grid-template-columns:1fr;gap:14px;min-height:0;}#services .service-visual{max-width:100%;}#services .mock-window{min-height:210px;}}
+@media(max-width:700px){#services .service-mosaic{grid-template-columns:1fr;gap:14px;}#services .service-card{grid-column:1!important;padding:20px;border-radius:18px;}#services .service-copy h3{font-size:1.35rem;}#services .service-visual{width:100%;}#services .mock-window{max-width:100%;}#services .service-tags{margin-top:14px;}}
+@media(prefers-reduced-motion:reduce){#services .service-card,#services .mock-window,#services .phone-shell{transition:none!important;animation:none!important;}#services .dash-chart i{animation:none!important;}}
+
+
+
+/* Compact services section: preserve the custom previews with less vertical space */
+#services{padding-top:5.5vh;padding-bottom:5.5vh;}
+#services>h2{margin-bottom:6px;font-size:clamp(1.85rem,3.8vw,2.8rem);}
+#services>.sub{margin-bottom:20px;font-size:.96rem;}
+#services .metrics{margin-bottom:20px;}
+#services .metrics div{padding:12px 15px;}
+#services .metrics b{font-size:clamp(1.25rem,2.3vw,1.65rem);}
+#services .metrics span{font-size:.74rem;}
+#services .service-mosaic{gap:12px;margin-top:18px;}
+#services .service-card{
+  min-height:224px;
+  padding:16px;
+  gap:12px;
+  grid-template-columns:minmax(0,1fr) minmax(135px,.94fr);
+  border-radius:18px;
+}
+#services .service-card:hover{transform:translateY(-4px);}
+#services .service-kicker{gap:7px;margin-bottom:9px;font-size:.57rem;letter-spacing:.09em;}
+#services .service-kicker-dot{width:6px;height:6px;}
+#services .service-copy h3{margin-bottom:6px;font-size:clamp(1.08rem,1.6vw,1.35rem);}
+#services .service-copy p{margin-bottom:9px;font-size:.79rem;line-height:1.5;}
+#services .service-copy .ticks{gap:4px;font-size:.72rem;line-height:1.35;}
+#services .service-copy .ticks li::before{margin-right:6px;}
+#services .service-tags{gap:5px;margin-top:10px;}
+#services .service-tags span{padding:4px 7px;font-size:.56rem;}
+#services .mock-window{min-height:150px;border-radius:12px;}
+#services .mock-bar{height:27px;gap:7px;padding:0 8px;font-size:.52rem;}
+#services .mock-bar b{font-size:.46rem;}
+#services .mock-dots{gap:3px;}
+#services .mock-dots i{width:5px;height:5px;}
+#services .phone-stage{min-height:150px;padding:7px;}
+#services .phone-shell{width:112px;padding:4px;border-radius:18px;}
+#services .phone-notch{width:36px;height:6px;margin-bottom:2px;}
+#services .phone-screen{min-height:138px;padding:7px;border-radius:13px;}
+#services .phone-greeting{margin-top:7px;}
+#services .phone-title{margin:3px 0 6px;font-size:9px;}
+#services .phone-tiles{gap:4px;}
+#services .phone-tiles span{padding:5px 5px;gap:3px;}
+#services .phone-tiles i{font-size:10px;}
+#services .phone-feature{gap:2px;margin-top:5px;padding:5px;}
+#services .phone-feature b{font-size:6px;}
+#services .phone-nav{margin-top:6px;}
+#services .api-body{padding:10px 9px 8px;}
+#services .api-route{gap:5px;padding:6px;font-size:.52rem;}
+#services .api-route small{padding:3px 4px;font-size:.46rem;}
+#services .api-route em{font-size:.46rem;}
+#services .api-code{margin-top:7px;padding:8px;font-size:.55rem;line-height:1.55;}
+#services .api-flow{gap:4px;margin-top:8px;font-size:.44rem;}
+#services .dashboard-body{padding:9px;}
+#services .dash-heading{font-size:.6rem;}
+#services .dash-stat-row{gap:5px;margin-top:7px;}
+#services .dash-stat-row div{gap:3px;padding:6px;}
+#services .dash-stat-row b{font-size:.9rem;}
+#services .dash-stat-row small,#services .dash-chart-head small{font-size:.43rem;}
+#services .dash-trend{font-size:.42rem;}
+#services .dash-chart-head{margin-top:8px;font-size:.57rem;}
+#services .dash-chart{height:43px;gap:4px;margin-top:5px;padding:5px 6px 0;}
+#services .dash-chart-labels{margin-top:3px;font-size:.42rem;}
+#services .market-body{padding:9px 8px;}
+#services .market-node{gap:7px;padding:7px;}
+#services .market-node>span{width:22px;height:22px;font-size:.62rem;}
+#services .market-node b{font-size:.59rem;}
+#services .market-node small{font-size:.47rem;}
+#services .market-connector{gap:5px;height:19px;font-size:.43rem;}
+#services .market-connector i{height:9px;}
+#services .market-middle{gap:5px;}
+#services .market-middle .market-node{gap:5px;padding:6px 5px;}
+#services .market-middle .market-node>span{width:19px;height:19px;}
+#services .market-live{gap:5px;margin-top:8px;padding:5px;font-size:.43rem;}
+#services>.flow{margin-top:20px;}
+@media(max-width:1050px){
+  #services .service-card{grid-column:span 6!important;grid-template-columns:minmax(0,1fr) minmax(125px,.9fr);gap:10px;min-height:210px;padding:14px;}
+  #services .mock-window,#services .phone-stage{min-height:140px;}
+}
+@media(max-width:760px){
+  #services .service-card{grid-column:span 12!important;grid-template-columns:minmax(0,1fr) minmax(160px,.9fr);min-height:200px;}
+}
+@media(max-width:560px){
+  #services{padding-top:42px;padding-bottom:42px;}
+  #services .metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+  #services .service-mosaic{grid-template-columns:1fr;gap:11px;}
+  #services .service-card{grid-column:1!important;grid-template-columns:1fr;gap:10px;padding:15px;min-height:0;}
+  #services .service-copy h3{font-size:1.22rem;}
+  #services .service-visual{width:100%;}
+  #services .mock-window{min-height:138px;}
+  #services .phone-stage{min-height:138px;}
+  #services .phone-shell{width:108px;}
+  #services>.flow{gap:6px;margin-top:16px;}
+  #services>.flow span{padding:8px 10px;font-size:.73rem;}
+}
+
+
+/* Modern technology stack */
+#stack.stack-section{position:relative;isolation:isolate;}
+#stack.stack-section::before{content:"";position:absolute;z-index:-1;inset:5% 0 0;background:radial-gradient(45% 55% at 5% 18%,color-mix(in srgb,var(--cy) 10%,transparent),transparent 75%),radial-gradient(45% 55% at 95% 80%,color-mix(in srgb,var(--vi) 11%,transparent),transparent 75%);pointer-events:none;}
+.stack-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;}
+.stack-heading{min-width:0;}
+.stack-eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:12px;color:var(--cy);font-size:.69rem;letter-spacing:.19em;font-weight:700;}
+.stack-eyebrow::before{content:"";width:22px;height:1px;background:var(--cy);box-shadow:0 0 12px var(--cy);}
+#stack .stack-heading h2{margin-bottom:8px;}
+#stack .stack-heading .sub{margin:0;max-width:43em;}
+.stack-meta{display:flex;align-items:center;gap:9px;flex:none;padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--card) 78%,transparent);color:var(--mute);font-size:.65rem;letter-spacing:.1em;}
+.stack-live-dot{width:7px;height:7px;border-radius:50%;background:#36e6ad;box-shadow:0 0 0 4px #36e6ad19,0 0 13px #36e6ad;}
+.stack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;}
+.stack-card{--stack-accent:var(--cy);position:relative;isolation:isolate;min-width:0;overflow:hidden;padding:22px 23px 21px;border:1px solid color-mix(in srgb,var(--stack-accent) 24%,var(--line));border-radius:17px;background:linear-gradient(135deg,color-mix(in srgb,var(--stack-accent) 7%,var(--card)),color-mix(in srgb,var(--card) 96%,transparent) 58%);box-shadow:0 12px 34px #00000017;transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease;}
+.stack-card::before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(300px circle at var(--stack-x,85%) var(--stack-y,0%),color-mix(in srgb,var(--stack-accent) 15%,transparent),transparent 68%);opacity:.45;transition:opacity .28s ease;pointer-events:none;}
+.stack-card::after{content:"";position:absolute;top:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,transparent,var(--stack-accent),transparent);opacity:.55;}
+.stack-mobile{--stack-accent:#28d9ed;}.stack-backend{--stack-accent:#9a83ff;}.stack-web{--stack-accent:#55dfae;}.stack-integrations{--stack-accent:#ffb86b;}
+.stack-card:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--stack-accent) 65%,var(--line));box-shadow:0 18px 42px color-mix(in srgb,var(--stack-accent) 10%,#000);}
+.stack-card:hover::before{opacity:1;}
+.stack-card-head{display:flex;align-items:center;gap:13px;min-width:0;}
+.stack-icon{display:grid;place-items:center;flex:none;width:43px;height:43px;border:1px solid color-mix(in srgb,var(--stack-accent) 38%,var(--line));border-radius:13px;background:color-mix(in srgb,var(--stack-accent) 13%,var(--bg));color:var(--stack-accent);font:700 .9rem "JetBrains Mono",monospace;letter-spacing:-.06em;box-shadow:inset 0 0 18px color-mix(in srgb,var(--stack-accent) 8%,transparent);}
+.stack-card-head>div{min-width:0;flex:1;}
+.stack-kicker{display:block;margin-bottom:3px;color:var(--stack-accent);font-size:.61rem;letter-spacing:.14em;font-weight:700;}
+.stack-card h3{margin:0;color:var(--ink);font-size:1.12rem;line-height:1.2;letter-spacing:-.025em;}
+.stack-arrow{flex:none;color:var(--mute);font-size:1.05rem;transition:transform .25s ease,color .25s ease;}
+.stack-card:hover .stack-arrow{transform:translate(3px,-3px);color:var(--stack-accent);}
+.stack-card>p{margin:13px 0 16px;color:var(--mute);font-size:.88rem;line-height:1.55;max-width:48em;}
+.stack-techs{display:flex;flex-wrap:wrap;gap:8px;}
+.stack-tech{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:5px 10px 5px 7px;border:1px solid color-mix(in srgb,var(--stack-accent) 17%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--bg) 72%,transparent);color:var(--ink);font-size:.78rem;line-height:1.2;white-space:nowrap;transition:background .2s ease,border-color .2s ease,transform .2s ease;}
+.stack-tech i{display:grid;place-items:center;min-width:19px;height:19px;padding:0 3px;border-radius:5px;background:color-mix(in srgb,var(--stack-accent) 17%,transparent);color:var(--stack-accent);font:700 .61rem "JetBrains Mono",monospace;font-style:normal;}
+.stack-card:hover .stack-tech{border-color:color-mix(in srgb,var(--stack-accent) 28%,var(--line));}
+@media(max-width:700px){.stack-header{align-items:flex-start;flex-direction:column;gap:14px;margin-bottom:21px;}.stack-grid{grid-template-columns:1fr;gap:12px;}.stack-card{padding:19px 18px;}.stack-card>p{margin:11px 0 14px;}}
+@media(prefers-reduced-motion:reduce){.stack-card,.stack-card::before,.stack-tech,.stack-arrow{transition:none!important;}.stack-card:hover{transform:none;}}
+
+/* Typography and overflow fix for the service showcase */
+#services .service-copy{min-width:0;max-width:100%;}
+#services .service-kicker{min-width:0;max-width:100%;flex-wrap:wrap;align-items:flex-start;line-height:1.55;overflow:visible;}
+#services .service-kicker-dot{flex:0 0 6px;margin-top:.38em;}
+#services .service-kicker-text{display:block;flex:1 1 0;min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;}
+#services .service-copy h3{line-height:1.3;padding-bottom:.06em;overflow-wrap:break-word;word-break:normal;}
+#services .service-copy p{line-height:1.58;overflow-wrap:break-word;}
+#services .service-copy .ticks li{min-width:0;line-height:1.48;overflow-wrap:break-word;}
+#services .service-tags{min-width:0;max-width:100%;}
+#services .service-tags span{max-width:100%;white-space:normal;overflow-wrap:anywhere;}
+@media(max-width:900px) and (min-width:561px){
+  #services .service-kicker{font-size:.53rem;letter-spacing:.055em;gap:6px;}
+  #services .service-copy h3{font-size:clamp(1.02rem,1.45vw,1.22rem);}
+  #services .service-copy p{font-size:.75rem;}
+  #services .service-copy .ticks{font-size:.68rem;}
+}
+
 </style>
 </head>
 <body>
@@ -182,7 +452,7 @@ form.contact [aria-invalid="true"]{border-color:#ff7b8a}
  <div class="hero">
   <div>
    <div class="chip mono"><i></i>Open for new projects</div>
-   <h1><span class="mono">CODEWARS LABS</span>Turning ideas into powerful digital products.</h1>
+   <h1><span class="mono">CODEWARS LABS</span>Your Vision. Our Expertise. Limitless Possibilities.</h1>
    <p class="lead">We engineer mobile applications, scalable backends, and complete digital experiences.</p>
    <div class="cta"><a class="btn p" href="#work">Explore Our Work</a><a class="btn g" href="#contact">Start Your Project</a></div>
   </div>
@@ -211,15 +481,97 @@ await notify(customer, "On the way");</pre>
   <h2>What we build</h2>
   <p class="sub">One team for the app, the server behind it, and the admin panel you run it from.</p>
   <div class="metrics mono"><div><b data-n="8" data-s="+">8+</b><span>years of experience</span></div><div><b data-n="6">6</b><span>product categories shipped</span></div><div><b>Android + iOS</b><span>from one Flutter codebase</span></div><div><b>Laravel</b><span>backends and admin panels</span></div></div>
-  <div class="grid">
-   <article class="win"><div class="wbar mono"><i></i><i></i><i></i><span>mobile_app.dart</span></div><div class="wbody"><pre class="snip mono"><span class="k">await</span> <span class="f">Firebase</span>.initializeApp();
-<span class="f">runApp</span>(<span class="k">const</span> App()); <span class="c">// Android + iOS</span></pre><h3>Mobile apps</h3><p>Fast, polished apps for Android and iOS.</p><ul class="ticks"><li>Flutter for both stores</li><li>Push notifications and live chat</li><li>Store submission and updates</li></ul></div></article>
-   <article class="win"><div class="wbar mono"><i></i><i></i><i></i><span>routes/api.php</span></div><div class="wbody"><pre class="snip mono"><span class="f">Route</span>::post(<span class="s">'/orders'</span>,
-  [<span class="f">OrderController</span>::class, <span class="s">'store'</span>]);</pre><h3>Backends and APIs</h3><p>Secure servers that grow with your users.</p><ul class="ticks"><li>Laravel and REST APIs</li><li>Stripe, PayPal and other payments</li><li>Real-time orders and tracking</li></ul></div></article>
-   <article class="win"><div class="wbar mono"><i></i><i></i><i></i><span>admin/Dashboard.tsx</span></div><div class="wbody"><pre class="snip mono">&lt;<span class="f">Dashboard</span> users={<span class="k">12458</span>}
-  role=<span class="s">"admin"</span> live /&gt;</pre><h3>Admin dashboards</h3><p>Manage users, content and money in one place.</p><ul class="ticks"><li>Role-based access</li><li>Analytics and reports</li><li>Multi-vendor management</li></ul></div></article>
-   <article class="win"><div class="wbar mono"><i></i><i></i><i></i><span>marketplace.ts</span></div><div class="wbody"><pre class="snip mono"><span class="k">const</span> trip = <span class="k">await</span> <span class="f">dispatch</span>(rider, vendor);
-<span class="f">notify</span>(customer, <span class="s">"On the way"</span>);</pre><h3>Marketplaces</h3><p>Food delivery, home services and booking platforms.</p><ul class="ticks"><li>Customer, vendor and rider apps</li><li>Scheduling and live status</li><li>Commission and payout tools</li></ul></div></article>
+  <div class="service-mosaic">
+   <article class="service-card service-mobile">
+    <div class="service-copy">
+     <div class="service-kicker"><span class="service-kicker-dot"></span><span class="service-kicker-text">01 / MOBILE DEVELOPMENT</span></div>
+     <h3>Mobile apps</h3>
+     <p>Fast, polished apps for Android and iOS, designed around the people who use them.</p>
+     <ul class="ticks"><li>Flutter for both stores</li><li>Push notifications and live chat</li><li>Store submission and updates</li></ul>
+     <div class="service-tags"><span>Flutter</span><span>Android</span><span>iOS</span></div>
+    </div>
+    <div class="service-visual">
+     <div class="mock-window phone-window">
+      <div class="mock-bar"><span class="mock-dots"><i></i><i></i><i></i></span><span>mobile_app.dart</span><b>APP PREVIEW</b></div>
+      <div class="phone-stage">
+       <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+         <div class="phone-status"><span>9:41</span><span>● ● ▰</span></div>
+         <div class="phone-greeting">Good morning <b>✦</b></div>
+         <div class="phone-title">What would you like to do?</div>
+         <div class="phone-tiles"><span><i>⌂</i>Explore</span><span><i>◈</i>Bookings</span><span><i>♡</i>Saved</span><span><i>◷</i>Activity</span></div>
+         <div class="phone-feature"><small>YOUR NEXT STEP</small><b>Everything in one place</b><span></span></div>
+         <div class="phone-nav"><i></i><i></i><i></i><i></i></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </article>
+
+   <article class="service-card service-backend">
+    <div class="service-copy">
+     <div class="service-kicker"><span class="service-kicker-dot"></span><span class="service-kicker-text">02 / BACKEND ENGINEERING</span></div>
+     <h3>Backends and APIs</h3>
+     <p>Secure, dependable server-side systems that connect your app, data and services.</p>
+     <ul class="ticks"><li>Laravel and REST APIs</li><li>Stripe, PayPal and other payments</li><li>Real-time orders and tracking</li></ul>
+     <div class="service-tags"><span>Laravel</span><span>REST API</span><span>MySQL</span></div>
+    </div>
+    <div class="service-visual">
+     <div class="mock-window api-window">
+      <div class="mock-bar"><span class="mock-dots"><i></i><i></i><i></i></span><span>routes/api.php</span><b>API STATUS</b></div>
+      <div class="api-body">
+       <div class="api-route"><small>POST</small><strong>/api/v1/orders</strong><em>200 OK</em></div>
+       <div class="api-code mono"><span class="api-muted">{</span><br>&nbsp; <span class="api-key">"status"</span>: <span class="api-value">"success"</span>,<br>&nbsp; <span class="api-key">"payment"</span>: <span class="api-value">"verified"</span>,<br>&nbsp; <span class="api-key">"tracking"</span>: <span class="api-value">true</span><br><span class="api-muted">}</span></div>
+       <div class="api-flow"><span>REQUEST</span><i></i><span>API</span><i></i><span>DATABASE</span></div>
+      </div>
+     </div>
+    </div>
+   </article>
+
+   <article class="service-card service-dashboard">
+    <div class="service-copy">
+     <div class="service-kicker"><span class="service-kicker-dot"></span><span class="service-kicker-text">03 / BUSINESS CONTROL</span></div>
+     <h3>Admin dashboards</h3>
+     <p>Manage users, content, orders and business operations from one clear control center.</p>
+     <ul class="ticks"><li>Role-based access</li><li>Analytics and reports</li><li>Multi-vendor management</li></ul>
+     <div class="service-tags"><span>Admin panel</span><span>Analytics</span><span>Management</span></div>
+    </div>
+    <div class="service-visual">
+     <div class="mock-window dashboard-window">
+      <div class="mock-bar"><span class="mock-dots"><i></i><i></i><i></i></span><span>admin / overview</span><b>CONTROL PANEL</b></div>
+      <div class="dashboard-body">
+       <div class="dash-heading"><span>Workspace overview</span><i>•••</i></div>
+       <div class="dash-stat-row"><div><small>ORDERS</small><b>— —</b><span class="dash-trend">LIVE OVERVIEW</span></div><div><small>REVENUE</small><b>— —</b><span class="dash-trend purple">REPORTS</span></div></div>
+       <div class="dash-chart-head"><span>Activity</span><small>LAST 7 DAYS</small></div>
+       <div class="dash-chart"><i style="height:34%"></i><i style="height:56%"></i><i style="height:43%"></i><i style="height:72%"></i><i style="height:61%"></i><i style="height:88%"></i><i style="height:76%"></i></div>
+       <div class="dash-chart-labels"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+      </div>
+     </div>
+    </div>
+   </article>
+
+   <article class="service-card service-marketplace">
+    <div class="service-copy">
+     <div class="service-kicker"><span class="service-kicker-dot"></span><span class="service-kicker-text">04 / CONNECTED PLATFORMS</span></div>
+     <h3>Marketplaces</h3>
+     <p>Bring customers, vendors and service providers together in one connected platform.</p>
+     <ul class="ticks"><li>Customer, vendor and rider apps</li><li>Scheduling and live status</li><li>Commission and payout tools</li></ul>
+     <div class="service-tags"><span>Multi-vendor</span><span>Booking</span><span>Delivery</span></div>
+    </div>
+    <div class="service-visual">
+     <div class="mock-window market-window">
+      <div class="mock-bar"><span class="mock-dots"><i></i><i></i><i></i></span><span>marketplace.flow</span><b>CONNECTED FLOW</b></div>
+      <div class="market-body">
+       <div class="market-node customer"><span>C</span><div><b>Customer</b><small>Places an order</small></div></div>
+       <div class="market-connector"><i></i><span>NEW ORDER</span><i></i></div>
+       <div class="market-middle"><div class="market-node vendor"><span>V</span><div><b>Vendor</b><small>Accepts & prepares</small></div></div><div class="market-node rider"><span>R</span><div><b>Rider</b><small>Delivers to customer</small></div></div></div>
+       <div class="market-live"><i></i> ORDER FLOW CONNECTED</div>
+      </div>
+     </div>
+    </div>
+   </article>
   </div>
   <div class="flow mono" role="img" aria-label="Mobile app connects to REST API, database and admin panel"><span>Mobile app</span><i></i><span>REST API</span><i></i><span>Database</span><i></i><span>Admin panel</span></div>
  </section>
@@ -237,10 +589,53 @@ await notify(customer, "On the way");</pre>
   </div>
  </section>
 
- <section id="stack">
-  <h2>Our stack</h2>
-  <p class="sub">Proven tools, chosen for speed and long-term maintainability.</p>
-  <div class="chips"><span>Flutter</span><span>Dart</span><span>Android</span><span>iOS</span><span>Laravel</span><span>PHP</span><span>MySQL</span><span>Firebase</span><span>REST APIs</span><span>Stripe</span><span>PayPal</span><span>Google Maps</span><span>Next.js</span><span>TypeScript</span></div>
+ <section id="stack" class="stack-section">
+  <div class="stack-header">
+   <div class="stack-heading">
+    <span class="stack-eyebrow mono">TECHNOLOGY / TOOLKIT</span>
+    <h2>Our stack</h2>
+    <p class="sub">Proven tools, chosen for speed, reliability and long-term maintainability.</p>
+   </div>
+   <div class="stack-meta mono"><span class="stack-live-dot"></span> 14 TECHNOLOGIES</div>
+  </div>
+  <div class="stack-grid" aria-label="Technologies used by CodeWars Labs">
+   <article class="stack-card stack-mobile">
+    <div class="stack-card-head">
+     <span class="stack-icon" aria-hidden="true">M</span>
+     <div><span class="stack-kicker mono">01 / MOBILE</span><h3>App development</h3></div>
+     <span class="stack-arrow" aria-hidden="true">↗</span>
+    </div>
+    <p>Cross-platform apps and native mobile experiences.</p>
+    <div class="stack-techs"><span class="stack-tech"><i>F</i>Flutter</span><span class="stack-tech"><i>D</i>Dart</span><span class="stack-tech"><i>A</i>Android</span><span class="stack-tech"><i>i</i>iOS</span></div>
+   </article>
+   <article class="stack-card stack-backend">
+    <div class="stack-card-head">
+     <span class="stack-icon" aria-hidden="true">{ }</span>
+     <div><span class="stack-kicker mono">02 / BACKEND</span><h3>Backend &amp; data</h3></div>
+     <span class="stack-arrow" aria-hidden="true">↗</span>
+    </div>
+    <p>Secure APIs, business logic and dependable data systems.</p>
+    <div class="stack-techs"><span class="stack-tech"><i>L</i>Laravel</span><span class="stack-tech"><i>P</i>PHP</span><span class="stack-tech"><i>SQL</i>MySQL</span><span class="stack-tech"><i>F</i>Firebase</span><span class="stack-tech"><i>API</i>REST APIs</span></div>
+   </article>
+   <article class="stack-card stack-web">
+    <div class="stack-card-head">
+     <span class="stack-icon" aria-hidden="true">&lt;/&gt;</span>
+     <div><span class="stack-kicker mono">03 / WEB</span><h3>Web development</h3></div>
+     <span class="stack-arrow" aria-hidden="true">↗</span>
+    </div>
+    <p>Fast, modern interfaces for web products and dashboards.</p>
+    <div class="stack-techs"><span class="stack-tech"><i>N</i>Next.js</span><span class="stack-tech"><i>TS</i>TypeScript</span></div>
+   </article>
+   <article class="stack-card stack-integrations">
+    <div class="stack-card-head">
+     <span class="stack-icon" aria-hidden="true">＋</span>
+     <div><span class="stack-kicker mono">04 / INTEGRATIONS</span><h3>Payments &amp; services</h3></div>
+     <span class="stack-arrow" aria-hidden="true">↗</span>
+    </div>
+    <p>Connect products to the services customers already trust.</p>
+    <div class="stack-techs"><span class="stack-tech"><i>S</i>Stripe</span><span class="stack-tech"><i>P</i>PayPal</span><span class="stack-tech"><i>G</i>Google Maps</span></div>
+   </article>
+  </div>
  </section>
 
   <section id="architecture">
@@ -253,11 +648,35 @@ await notify(customer, "On the way");</pre>
  <section id="process">
   <h2>How a project runs</h2>
   <p class="sub">Clear steps, regular demos, and no surprises on price.</p>
-  <ol class="steps">
-   <li><h3>Scope</h3><p>We turn your idea into a feature list, timeline and fixed quote.</p></li>
-   <li><h3>Design</h3><p>You approve screens before any code is written.</p></li>
-   <li><h3>Build</h3><p>Weekly builds you can install and test on your phone.</p></li>
-   <li><h3>Launch</h3><p>We publish to Google Play and the App Store, then support you after release.</p></li>
+  <ol class="steps process-steps" aria-label="Four stages of a project">
+   <li class="process-step">
+    <span class="step-node" aria-hidden="true"></span>
+    <span class="step-kicker">PHASE 01 / DISCOVERY</span>
+    <h3>Scope</h3>
+    <p>We turn your idea into a feature list, timeline and fixed quote.</p>
+    <span class="step-footer">PLAN THE RIGHT START</span>
+   </li>
+   <li class="process-step">
+    <span class="step-node" aria-hidden="true"></span>
+    <span class="step-kicker">PHASE 02 / EXPERIENCE</span>
+    <h3>Design</h3>
+    <p>You approve screens before any code is written.</p>
+    <span class="step-footer">MAKE IT FEEL RIGHT</span>
+   </li>
+   <li class="process-step">
+    <span class="step-node" aria-hidden="true"></span>
+    <span class="step-kicker">PHASE 03 / ENGINEERING</span>
+    <h3>Build</h3>
+    <p>Weekly builds you can install and test on your phone.</p>
+    <span class="step-footer">BUILD. TEST. IMPROVE.</span>
+   </li>
+   <li class="process-step">
+    <span class="step-node" aria-hidden="true"></span>
+    <span class="step-kicker">PHASE 04 / DELIVERY</span>
+    <h3>Launch</h3>
+    <p>We publish to Google Play and the App Store, then support you after release.</p>
+    <span class="step-footer">GO LIVE WITH CONFIDENCE</span>
+   </li>
   </ol>
  </section>
 
@@ -454,7 +873,7 @@ cf.addEventListener("submit",function(ev){ev.preventDefault();var bad=null,out=d
  document.getElementById("viaWa").href="https://wa.me/"+WA+"?text="+encodeURIComponent(b);
  out.hidden=false});
 document.querySelectorAll(".metrics [data-n]").forEach(function(el){var n=+el.dataset.n,x=el.dataset.s||"";if(reduce||!("IntersectionObserver" in window))return;el.textContent="0"+x;var io=new IntersectionObserver(function(en){if(!en[0].isIntersecting)return;io.disconnect();var s=performance.now();(function st(now){var p=Math.min(1,(now-s)/1200);el.textContent=Math.round(n*p)+x;if(p<1)requestAnimationFrame(st)})(s)});io.observe(el)});
-document.addEventListener("pointermove",function(e){var c=e.target.closest&&e.target.closest(".card,.win,.steps li");if(!c)return;var b=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-b.left)+"px");c.style.setProperty("--my",(e.clientY-b.top)+"px")},{passive:true});
+document.addEventListener("pointermove",function(e){var c=e.target.closest&&e.target.closest(".card,.win,.service-card,.steps li");if(!c)return;var b=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-b.left)+"px");c.style.setProperty("--my",(e.clientY-b.top)+"px")},{passive:true});
 /* hero tilt */
 var st2=document.getElementById("stage");
 if(!reduce&&st2)st2.addEventListener("pointermove",function(e){var b=st2.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;st2.style.transform="rotateY("+x*8+"deg) rotateX("+(-y*6)+"deg)"});
@@ -476,6 +895,27 @@ NN.forEach(function(n){var x=n[2],y=n[3];a+='<g class="anode" tabindex="0" data-
 box.innerHTML='<svg viewBox="0 0 900 400" role="img" aria-label="Architecture: customer apps, REST API, backend engine, database and admin dashboard, with payments, authentication, notifications and third-party integrations connected to the backend">'+a+"</svg>";
 function shw(e){var g=e.target.closest(".anode");if(g)note.textContent=g.dataset.n+": "+AD[g.dataset.n]}
 ["mouseover","focusin","click"].forEach(function(v){box.addEventListener(v,shw)});
+})();
+</script>
+
+<script>
+/* Reveal project stages as they enter the viewport. */
+(function(){
+  var list=document.querySelector("#process .process-steps");
+  if(!list)return;
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce||!("IntersectionObserver" in window))return;
+  var items=list.querySelectorAll(".process-step");
+  list.classList.add("reveal-enabled");
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:.16,rootMargin:"0px 0px -35px 0px"});
+  items.forEach(function(item){observer.observe(item)});
 })();
 </script>
 </body>
