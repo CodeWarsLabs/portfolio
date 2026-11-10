@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{--bg:#06080f;--ink:#e8f0ff;--mute:#8393b3;--cy:#27e1ff;--vi:#8a6bff;--line:#1b2540;--card:#0d1322;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
-{:root:not([data-theme="dark"]){--bg:#f3f6fc;--ink:#0b1226;--mute:#52607f;--cy:#0a7fa0;--vi:#5b3fe0;--line:#d4dcee;--card:#fff;color-scheme:light}}
 :root[data-theme="dark"]{--bg:#06080f;--ink:#e8f0ff;--mute:#8393b3;--cy:#27e1ff;--vi:#8a6bff;--line:#1b2540;--card:#0d1322}
 *,*::before,*::after{box-sizing:inherit}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
@@ -117,7 +116,7 @@ h2{font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:-.03em}.sub{font-size:1.05r
 #contact h2{font-size:clamp(1.9rem,4.2vw,3.1rem);line-height:1.06;margin-bottom:22px}#contact h2 .g{display:block;background:linear-gradient(100deg,var(--cy),var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
 #contact .reach{grid-column:1}
 .btn.wa{background:#25d366;color:#04200f;border:0;box-shadow:0 10px 30px #25d36640}
-#contact form.contact{max-width:none}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:620px){.two{grid-template-columns:1fr}}
+#contact form.contact{max-width:none}#cf{scroll-margin-top:110px}#work{scroll-margin-top:100px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:620px){.two{grid-template-columns:1fr}}
 form.contact input:focus,form.contact select:focus,form.contact textarea:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px color-mix(in srgb,var(--cy) 25%,transparent)}
 form.contact [aria-invalid="true"]{border-color:#ff7b8a}
 .err{color:#ff7b8a;font-size:.82rem;min-height:1.1em;margin:0}
@@ -156,7 +155,7 @@ form.contact [aria-invalid="true"]{border-color:#ff7b8a}
 
 /* contact cards + architecture */
 .ccl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:22px}
-.ccard{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 60%,transparent);text-decoration:none;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ccard{display:flex;align-items:center;gap:14px;min-height:74px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 60%,transparent);text-decoration:none;transition:transform .25s,border-color .25s,box-shadow .25s}
 .ccard i{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--b);color:var(--f,#04110c);font:700 13px "Space Grotesk",sans-serif;font-style:normal}
 .ccard div{min-width:0;flex:1}.ccard b{display:block;font-size:.92rem}.ccard span{display:block;color:var(--mute);font-size:.82rem;overflow-wrap:anywhere}
 .ccard em{font:700 .78rem "Space Grotesk",sans-serif;font-style:normal;color:var(--e,var(--b));white-space:nowrap}
@@ -266,7 +265,57 @@ await notify(customer, "On the way");</pre>
   <h2>HAVE AN IDEA?<span class="g">LET’S ENGINEER IT INTO REALITY.</span></h2>
   <div class="reach">
    <div class="cta"><a class="btn wa" href="https://wa.me/8801571051992" target="_blank" rel="noopener">Chat on WhatsApp</a><a class="btn g" href="mailto:ourhelpline23@gmail.com">Send an email</a></div>
-   <div class="ccl"><a class="ccard" style="--b:#37f0c6;" href="mailto:ourhelpline23@gmail.com"><i>@</i><div><b>Email</b><span>ourhelpline23@gmail.com</span></div><em>Send ↗</em></a><a class="ccard" style="--b:#25d366;" href="https://wa.me/8801571051992" target="_blank" rel="noopener"><i>WA</i><div><b>WhatsApp</b><span>+8801571-051992</span></div><em>Chat ↗</em></a><a class="ccard" style="--b:#1dbf73;" href="https://www.fiverr.com/ridoykhanprince/" target="_blank" rel="noopener"><i>Fi</i><div><b>Fiverr</b><span>ridoykhanprince</span></div><em>Open ↗</em></a><a class="ccard" style="--b:#e6edf3;--e:var(--ink);" href="https://github.com/CodeWarsLabs" target="_blank" rel="noopener"><i>GH</i><div><b>GitHub</b><span>CodeWarsLabs</span></div><em>Open ↗</em></a><a class="ccard" style="--b:#0a66c2;--f:#fff;" href="https://www.linkedin.com/in/md-hridoy-hossen-758131240/" target="_blank" rel="noopener"><i>in</i><div><b>LinkedIn</b><span>Md Hridoy Hossen</span></div><em>Open ↗</em></a><a class="ccard" style="--b:#6f7dff;--f:#fff;" href="https://codewarslabs.github.io/portfolio/" target="_blank" rel="noopener"><i>&lt;/&gt;</i><div><b>Portfolio repository</b><span>codewarslabs-portfolio</span></div><em>View ↗</em></a></div>
+   <!-- Contact shortcuts: portfolio, project request, and direct contact channels. -->
+   <div class="ccl">
+    <a class="ccard" style="--b:#8a6bff;--f:#fff;" href="#work" aria-label="Explore my portfolio">
+     <i>MP</i>
+     <div>
+      <b>My Portfolio</b>
+      <span>Explore selected apps and digital products</span>
+     </div>
+     <em>Explore ↗</em>
+    </a>
+    <a class="ccard" style="--b:#27e1ff;--f:#04110c;" href="#cf" aria-label="Request a project">
+     <i>RQ</i>
+     <div>
+      <b>Request a Project</b>
+      <span>Tell us about your idea and requirements</span>
+     </div>
+     <em>Start ↗</em>
+    </a>
+    <a class="ccard" style="--b:#37f0c6;" href="mailto:ourhelpline23@gmail.com">
+     <i>@</i>
+     <div>
+      <b>Email</b>
+      <span>ourhelpline23@gmail.com</span>
+     </div>
+     <em>Send ↗</em>
+    </a>
+    <a class="ccard" style="--b:#25d366;" href="https://wa.me/8801571051992" target="_blank" rel="noopener noreferrer">
+     <i>WA</i>
+     <div>
+      <b>WhatsApp</b>
+      <span>+8801571-051992</span>
+     </div>
+     <em>Chat ↗</em>
+    </a>
+    <a class="ccard" style="--b:#1dbf73;" href="https://www.fiverr.com/ridoykhanprince/" target="_blank" rel="noopener noreferrer">
+     <i>Fi</i>
+     <div>
+      <b>Fiverr</b>
+      <span>ridoykhanprince</span>
+     </div>
+     <em>Open ↗</em>
+    </a>
+    <a class="ccard" style="--b:#0a66c2;--f:#fff;" href="https://www.linkedin.com/in/md-hridoy-hossen-758131240/" target="_blank" rel="noopener noreferrer">
+     <i>in</i>
+     <div>
+      <b>LinkedIn</b>
+      <span>Md Hridoy Hossen</span>
+     </div>
+     <em>Open ↗</em>
+    </a>
+   </div>
   </div>
   <form class="contact" id="cf" novalidate>
    <label>Full name<input name="n" autocomplete="name" aria-describedby="er-n"><p class="err" id="er-n"></p></label>
