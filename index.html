@@ -264,7 +264,7 @@ await notify(customer, "On the way");</pre>
  <section id="contact">
   <h2>HAVE AN IDEA?<span class="g">LET’S ENGINEER IT INTO REALITY.</span></h2>
   <div class="reach">
-   <div class="cta"><a class="btn wa" href="https://wa.me/8801571051992" target="_blank" rel="noopener">Chat on WhatsApp</a><a class="btn g" href="mailto:ourhelpline23@gmail.com">Send an email</a></div>
+   <div class="cta"><a class="btn wa" href="https://wa.me/8801571051992" target="_blank" rel="noopener">Chat on WhatsApp</a><a class="btn g" href="https://mail.google.com/mail/?view=cm&fs=1&to=ourhelpline23%40gmail.com" target="_blank" rel="noopener noreferrer">Send an email</a></div>
    <!-- Contact shortcuts: portfolio, project request, and direct contact channels. -->
    <div class="ccl">
     <a class="ccard" style="--b:#8a6bff;--f:#fff;" href="#work" aria-label="Explore my portfolio">
@@ -283,7 +283,7 @@ await notify(customer, "On the way");</pre>
      </div>
      <em>Start ↗</em>
     </a>
-    <a class="ccard" style="--b:#37f0c6;" href="mailto:ourhelpline23@gmail.com">
+    <a class="ccard" style="--b:#37f0c6;" href="https://mail.google.com/mail/?view=cm&fs=1&to=ourhelpline23%40gmail.com" target="_blank" rel="noopener noreferrer">
      <i>@</i>
      <div>
       <b>Email</b>
@@ -448,7 +448,9 @@ cf.addEventListener("submit",function(ev){ev.preventDefault();var bad=null,out=d
  Array.prototype.forEach.call(cf.querySelectorAll("[name]"),function(el){if(!chk(el)&&!bad)bad=el});
  if(bad){out.hidden=true;bad.focus();return}
  var b="New project inquiry\n\nName: "+f.n.value.trim()+"\nEmail: "+f.e.value.trim()+"\nProject type: "+f.t.value+"\nBudget: "+f.b.value+"\n\n"+f.m.value.trim();
- document.getElementById("viaMail").href="mailto:"+TO+"?subject="+encodeURIComponent("New project: "+f.t.value)+"&body="+encodeURIComponent(b);
+ document.getElementById("viaMail").href="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(TO)+"&su="+encodeURIComponent("New project: "+f.t.value)+"&body="+encodeURIComponent(b);
+ document.getElementById("viaMail").target="_blank";
+ document.getElementById("viaMail").rel="noopener noreferrer";
  document.getElementById("viaWa").href="https://wa.me/"+WA+"?text="+encodeURIComponent(b);
  out.hidden=false});
 document.querySelectorAll(".metrics [data-n]").forEach(function(el){var n=+el.dataset.n,x=el.dataset.s||"";if(reduce||!("IntersectionObserver" in window))return;el.textContent="0"+x;var io=new IntersectionObserver(function(en){if(!en[0].isIntersecting)return;io.disconnect();var s=performance.now();(function st(now){var p=Math.min(1,(now-s)/1200);el.textContent=Math.round(n*p)+x;if(p<1)requestAnimationFrame(st)})(s)});io.observe(el)});
