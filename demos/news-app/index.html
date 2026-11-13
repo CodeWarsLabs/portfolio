@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dhoron News — Android & iOS News App (Interactive Demo)</title>
+<style>
+:root{--bg:#0d0d12;--card:#16161f;--card2:#1e1e29;--line:#2a2a3a;--red:#e63946;--red-d:#b92b37;--text:#f1f1f6;--dim:#9a9ab0;--gold:#ffd166}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1100px 700px at 70% -10%,#2a1016 0%,transparent 55%),var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);display:flex;justify-content:center;min-height:100vh;padding:18px 10px}
+.app{width:100%;max-width:430px;background:var(--bg);border:1px solid var(--line);border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 8px #07070c;display:flex;flex-direction:column;height:920px;max-height:96vh;position:relative}
+.ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2b1e00;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60}
+.masthead{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 10px;border-bottom:2px solid var(--red)}
+.brand b{font-size:24px;font-weight:900;letter-spacing:-.5px}.brand b span{color:var(--red)}
+.brand small{display:block;font-size:9.5px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+.pubbtn{background:var(--card2);border:1px solid var(--line);color:var(--gold);border-radius:10px;padding:9px 12px;cursor:pointer;font-size:11.5px;font-weight:700}
+.ticker{background:var(--red);color:#fff;font-size:11px;padding:6px 0;overflow:hidden;white-space:nowrap}
+.tickerinner{display:inline-block;padding-left:100%;animation:tick 22s linear infinite;font-weight:600}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.chips{display:flex;gap:8px;padding:12px 14px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.fchip{background:var(--card2);border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:7px 14px;font-size:12px;white-space:nowrap;cursor:pointer;font-family:inherit}
+.fchip.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:800}
+.feed{flex:1;overflow-y:auto;padding:12px 14px}
+.story{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:10px;cursor:pointer;transition:border-color .2s}
+.story:hover{border-color:var(--red)}
+.thumb{width:96px;height:96px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:38px}
+.sinfo{flex:1}.sinfo b{font-size:13.5px;line-height:1.4;display:block}
+.meta{color:var(--dim);font-size:10px;margin:6px 0 4px;display:flex;gap:8px;align-items:center}
+.cat{color:var(--red);font-weight:800;letter-spacing:.5px;text-transform:uppercase;font-size:9.5px}
+.bm{background:none;border:none;cursor:pointer;color:var(--dim);padding:4px}
+.bm.saved{color:var(--gold)}
+/* Article reader */
+.reader{position:absolute;inset:0;background:var(--bg);z-index:30;display:none;flex-direction:column}
+.reader.open{display:flex;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.reader .back{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.reader-body{flex:1;overflow-y:auto;padding:20px 22px}
+.reader-body h1{font-size:25px;line-height:1.3;margin-bottom:10px;letter-spacing:-.4px}
+.reader-body p{color:#c9c9d8;line-height:1.75;font-size:14.5px;margin-bottom:14px}
+.hero-art{height:180px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:76px;margin:12px 0 16px}
+/* Publish panel */
+.pub{position:absolute;inset:0;background:var(--bg);z-index:35;display:none;flex-direction:column}
+.pub.open{display:flex;animation:fadein .3s ease}
+.pub-body{flex:1;overflow-y:auto;padding:18px}
+label{font-size:12px;color:var(--dim);display:block;margin:12px 0 5px;letter-spacing:.6px;text-transform:uppercase}
+input,textarea,select{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:12px;font-family:inherit;font-size:14px}
+textarea{min-height:110px;resize:vertical}
+.publishbtn{background:var(--red);color:#fff;border:none;border-radius:14px;padding:14px;font-weight:800;width:100%;margin-top:14px;font-size:15px;cursor:pointer}
+.toast{position:absolute;bottom:26px;left:50%;transform:translateX(-50%) translateY(14px);background:#1d0a0e;border:1px solid #57202a;color:#ffb3ba;padding:10px 18px;border-radius:10px;font-size:12.5px;opacity:0;transition:all .25s;z-index:70;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="ribbon">DEMO</div>
+  <div class="masthead">
+    <div class="brand"><b>Dhoron<span>News</span></b><small>Android & iOS · Flutter</small></div>
+    <button class="pubbtn" onclick="togglePub()">✎ Publish</button>
+  </div>
+  <div class="ticker"><div class="tickerinner">⚡ BREAKING: Dhaka metro rail phase-2 approved &nbsp;•&nbsp; 🌩️ Heavy rain expected this weekend &nbsp;•&nbsp; 🏏 Bangladesh squad announced for Asia Cup &nbsp;•&nbsp; 💻 Startup funding up 40% YoY &nbsp;•&nbsp;</div></div>
+  <div class="chips" id="catChips"></div>
+  <div class="feed" id="feed"></div>
+
+  <!-- Article reader -->
+  <div class="reader" id="reader">
+    <div class="back"><button class="pubbtn" onclick="closeReader()">← Back</button><button class="bm" id="readerBookmark" onclick="bookmarkCurrent()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16l-6-4.5L6 20V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button></div>
+    <div class="reader-body">
+      <span class="cat" id="rCat">Politics</span>
+      <h1 id="rTitle">Title</h1>
+      <div class="meta"><span id="rSource">Dhoron News</span><span>·</span><span id="rTime">2h ago</span></div>
+      <div class="hero-art" id="rArt">🏛️</div>
+      <p id="rBody1"></p>
+      <p id="rBody2"></p>
+    </div>
+  </div>
+
+  <!-- Publisher panel -->
+  <div class="pub" id="pub">
+    <div class="back" style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><b>Publish New Story</b><button class="pubbtn" onclick="togglePub()">Close</button></div>
+    <div class="pub-body">
+      <label>Headline</label><input id="pubTitle" placeholder="Write a strong headline…">
+      <label>Category</label><select id="pubCat"><option>Politics</option><option>Tech</option><option>Sports</option><option>Entertainment</option><option>Business</option></select>
+      <label>Body</label><textarea id="pubBody" placeholder="Article body…"></textarea>
+      <button class="publishbtn" onclick="publishStory()">Publish Now</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('dhoron_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('dhoron_' + k, JSON.stringify(v)) };
+const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); };
+const CATS = ['All', 'Politics', 'Tech', 'Sports', 'Entertainment', 'Business'];
+const SEED = [
+  { title: 'Metro rail phase-2 approved — 6 new stations', cat: 'Politics', time: '12m ago', emoji: '🚇', body1: 'The cabinet approved the revised alignment of the Dhaka Metro Rail phase-2 project on Sunday, covering six new stations and an elevated section through Uttara.', body2: 'Officials expect construction to begin in Q1 next year, with first services targeted for 2029. The project will be executed by a Japanese-backed joint venture with local partners.' },
+  { title: 'Local chip startup raises $3.2M seed round', cat: 'Tech', time: '48m ago', emoji: '💻', body1: 'Dhaka-based semiconductor design startup SiChip announced a $3.2M seed funding led by Singapore-based Wavemaker, its largest round yet.', body2: 'The team plans to tape out its first AI inference accelerator next year and hire 12 engineers, tripling the current headcount.' },
+  { title: 'Bangladesh squad announced for Asia Cup', cat: 'Sports', time: '1h ago', emoji: '🏏', body1: 'The BCB announced a 15-member squad for the Asia Cup, with two uncapped players earning call-ups after dominant domestic performances.', body2: 'The skipper said selection rewards form and fitness, and the team will depart for a two-week camp in Dubai ahead of the tournament.' },
+  { title: 'Panel show “Ekusher Raat” crosses 2 crore views', cat: 'Entertainment', time: '3h ago', emoji: '🎬', body1: 'The weekly political satire-talk show crossed 20 million total views on YouTube, becoming the most-watched Bengali panel program of the year.', body2: 'Creators credit the format — long-form debate plus musical parody segments — for its unusually high retention among young viewers.' },
+  { title: 'Exports grow 18% — garments lead the surge', cat: 'Business', time: '5h ago', emoji: '📈', body1: 'Export earnings rose 18% year-on-year in the first quarter, led by ready-made garments and frozen foods, according to the Export Promotion Bureau.', body2: 'Economists caution that energy costs and currency volatility could trim gains, and recommend hedging for mid-size exporters.' },
+  { title: '6G trials announced for 2028 — BTRC roadmap', cat: 'Tech', time: '7h ago', emoji: '📡', body1: 'The telecom regulator published a 6G readiness roadmap targeting pilot trials by 2028, including spectrum allocation and testbed partnerships.', body2: 'Operators welcomed the clarity but asked for import duty relief on network gear to keep deployment costs viable.' },
+];
+let stories = store.get('stories', SEED);
+let saved = store.get('saved', []);
+let cat = 'All';
+let currentId = null;
+
+$('#catChips').innerHTML = CATS.map(c => `<button class="fchip ${c === 'All' ? 'active' : ''}" data-c="${c}">${c}</button>`).join('');
+$('#catChips').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if (!b) return;
+  cat = b.dataset.c;
+  document.querySelectorAll('#catChips .fchip').forEach(x => x.classList.toggle('active', x === b));
+  renderFeed();
+});
+function renderFeed() {
+  const list = stories.filter(s => cat === 'All' || s.cat === cat);
+  $('#feed').innerHTML = list.map(s => {
+    const id = stories.indexOf(s);
+    const isSaved = saved.includes(id);
+    return `<div class="story" onclick="openReader(${id})"><div class="thumb" style="background:linear-gradient(145deg,#1d1d2b,#12121c)">${s.emoji}</div>
+      <div class="sinfo"><b>${s.title}</b><div class="meta"><span class="cat">${s.cat}</span><span>${s.time}</span></div>
+        <button class="bm ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSave(${id})" aria-label="Bookmark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isSaved ? 'var(--gold)' : 'none'}"><path d="M6 4h12v16l-6-4.5L6 20V4Z" stroke="${isSaved ? 'var(--gold)' : 'currentColor'}" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button></div></div>`;
+  }).join('') || '<p style="color:var(--dim);padding:30px;text-align:center">No stories in this category yet.</p>';
+}
+window.toggleSave = id => { saved = saved.includes(id) ? saved.filter(x => x !== id) : [...saved, id]; store.set('saved', saved); renderFeed(); showToast(saved.includes(id) ? 'Bookmarked' : 'Removed bookmark'); };
+window.openReader = id => {
+  const s = stories[id]; currentId = id;
+  $('#rCat').textContent = s.cat; $('#rTitle').textContent = s.title; $('#rTime').textContent = s.time;
+  $('#rArt').textContent = s.emoji; $('#rBody1').textContent = s.body1; $('#rBody2').textContent = s.body2;
+  $('#readerBookmark').classList.toggle('saved', saved.includes(id));
+  $('#reader').classList.add('open');
+};
+window.closeReader = () => $('#reader').classList.remove('open');
+window.bookmarkCurrent = () => { if (currentId !== null) toggleSave(currentId); $('#readerBookmark').classList.toggle('saved', saved.includes(currentId)); };
+window.togglePub = () => $('#pub').classList.toggle('open');
+window.publishStory = () => {
+  const t = $('#pubTitle').value.trim(), b = $('#pubBody').value.trim(), c = $('#pubCat').value;
+  if (!t || !b) return showToast('Headline and body both required');
+  stories.unshift({ title: t, cat: c, time: 'just now', emoji: '🗞️', body1: b, body2: 'This story was published from the in-app publishing desk. In production, it would be pushed with a notification to all subscribers and synced with the admin panel and backend API.' });
+  store.set('stories', stories);
+  $('#pubTitle').value = ''; $('#pubBody').value = '';
+  togglePub(); renderFeed(); showToast('Published! Subscribers notified.');
+};
+renderFeed();
+</script>
+</body>
+</html>

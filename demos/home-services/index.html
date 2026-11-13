@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProServe — Multi-Vendor Home Services (Interactive Demo)</title>
+<style>
+:root{--bg:#0a1414;--card:#101f1f;--card2:#16292a;--line:#1f3a3b;--teal:#14b8a6;--teal-d:#0f766e;--amber:#fbbf24;--text:#e6fffa;--dim:#7ba49e;--green:#34d399}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1000px 700px at 75% -10%,#0e2f2b 0%,transparent 55%),var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);display:flex;justify-content:center;min-height:100vh;padding:18px 10px}
+.app{width:100%;max-width:430px;background:var(--bg);border:1px solid var(--line);border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 8px #050d0d;display:flex;flex-direction:column;height:920px;max-height:96vh;position:relative}
+.ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#03211d;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#14b8a6,#0f766e);display:flex;align-items:center;justify-content:center}
+.brand b{font-size:18px}.brand b span{color:var(--teal)}.brand small{display:block;font-size:9.5px;color:var(--dim);letter-spacing:2px;text-transform:uppercase}
+.pill-loc{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 12px;display:flex;gap:6px;align-items:center}
+.screens{flex:1;overflow:hidden;position:relative}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:14px;display:none;scrollbar-width:thin}
+.screen.active{display:block;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1.scr{font-size:21px;margin-bottom:10px}h1.scr small{color:var(--dim);font-size:11px;display:block;letter-spacing:1px;text-transform:uppercase}
+.searchbar{display:flex;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;color:var(--dim);font-size:13px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px}
+.fchip{background:var(--card2);border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:8px 14px;font-size:12px;white-space:nowrap;cursor:pointer;font-family:inherit}
+.fchip.active{background:var(--teal);border-color:var(--teal);color:#03211d;font-weight:800}
+.pro{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;align-items:center}
+.avatar{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;flex-shrink:0}
+.pinfo{flex:1}.pinfo b{font-size:14px}
+.muted{color:var(--dim);font-size:11.5px;margin:2px 0}
+.bookbtn{background:var(--teal);color:#03211d;border:none;border-radius:10px;padding:10px 13px;font-weight:800;cursor:pointer;font-size:11px;white-space:nowrap}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:var(--card2);border-radius:12px;padding:12px;text-align:center}.stat b{font-size:19px;color:var(--amber)}.stat span{font-size:10px;color:var(--dim);display:block;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.job{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card2);border-radius:12px;padding:11px 12px;margin-top:10px}
+.job b{font-size:13px}.job .muted{margin:2px 0}
+.jbtn{border:1px solid var(--line);background:none;color:var(--teal);border-radius:8px;padding:8px 12px;font-size:11px;cursor:pointer;font-weight:700;white-space:nowrap}
+.jbtn.ok{color:var(--green);border-color:#1f4630}
+.modal{position:absolute;inset:0;background:rgba(2,10,10,.82);display:none;align-items:flex-end;z-index:40}
+.modal.open{display:flex;animation:fadein .25s ease}
+.msheet{background:var(--card);width:100%;border-radius:22px 22px 0 0;padding:20px;border-top:1px solid var(--line)}
+.times{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.time{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:13px}
+.time.active{background:var(--teal);color:#03211d;border-color:var(--teal);font-weight:800}
+.confirm{width:100%;background:var(--teal);color:#03211d;border:none;border-radius:14px;padding:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:6px}
+.toast{position:absolute;bottom:110px;left:50%;transform:translateX(-50%) translateY(14px);background:#032a1f;border:1px solid #1f6f4f;color:#7bf0c0;padding:10px 18px;border-radius:10px;font-size:12.5px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav{display:flex;border-top:1px solid var(--line);background:#0e1a1a;padding:8px 4px}
+.nav button{flex:1;background:none;border:none;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;cursor:pointer;padding:7px 0;font-family:inherit}
+.nav button.active{color:var(--teal)}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.bars{display:flex;align-items:flex-end;gap:8px;height:110px;padding-top:8px;border-top:1px solid var(--line)}
+.bar{flex:1;background:linear-gradient(180deg,var(--teal),#0b5f55);border-radius:5px 5px 2px 2px;min-height:5px}
+.barlbl{flex:1;text-align:center;font-size:9.5px;color:var(--dim);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="ribbon">DEMO</div>
+  <div class="hdr">
+    <div class="brand">
+      <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 12a3 3 0 1 0 0-.01M12 8V4M12 20v-4M4 12h4M16 12h4" stroke="#03302a" stroke-width="2" stroke-linecap="round"/><path d="M14.5 9.5 17 7M9.5 14.5 7 17M14.5 14.5 17 17M9.5 9.5 7 7" stroke="#03302a" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div><b>Pro<span>Serve</span></b><small>Home Services Marketplace</small></div>
+    </div>
+    <div class="pill-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>Dhanmondi, Dhaka</div>
+  </div>
+
+  <div class="screens">
+    <!-- CUSTOMER -->
+    <section class="screen active" id="scr-customer">
+      <h1 class="scr"><small>Book a Pro in minutes</small>What do you need fixed?</h1>
+      <div class="searchbar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Search services or providers…</div>
+      <div class="chips" id="catChips"></div>
+      <div id="proList"></div>
+    </section>
+
+    <!-- PROVIDER -->
+    <section class="screen" id="scr-provider">
+      <h1 class="scr"><small>Rahim — Plumbing Pro</small>New Job Requests</h1>
+      <div class="stats">
+        <div class="stat"><b>36</b><span>Jobs this month</span></div>
+        <div class="stat"><b>৳ 41k</b><span>Earnings</span></div>
+        <div class="stat"><b>4.9★</b><span>280 reviews</span></div>
+        <div class="stat"><b>96%</b><span>On-time</span></div>
+      </div>
+      <div id="jobList"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="screen" id="scr-admin">
+      <h1 class="scr"><small>Platform Admin</small>Overview</h1>
+      <div class="stats">
+        <div class="stat"><b>2,140</b><span>Bookings today</span></div>
+        <div class="stat"><b>৳ 6.2L</b><span>GMV today</span></div>
+        <div class="stat"><b>860</b><span>Verified providers</span></div>
+        <div class="stat"><b>24 min</b><span>Avg response</span></div>
+      </div>
+      <div class="searchbar" style="margin-bottom:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Bookings — Last 7 days</div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px">
+        <div class="bars" id="adminBars" style="border:none;padding-top:0"></div>
+        <div class="row" style="margin-top:4px" id="adminBarsLbl"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Booking modal -->
+  <div class="modal" id="bookingModal">
+    <div class="msheet">
+      <div class="row" style="margin-bottom:6px"><b style="font-size:17px" id="bmName">Provider</b><button class="jbtn" onclick="closeBooking()">Close</button></div>
+      <p class="muted" id="bmService">Service</p>
+      <div class="times" id="timeSlots"></div>
+      <button class="confirm" onclick="confirmBooking()">Confirm Booking — No Advance Needed</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Done</div>
+
+  <nav class="nav" id="roleNav"></nav>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('proserve_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('proserve_' + k, JSON.stringify(v)) };
+const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2400); };
+
+/* ---------- Role nav ---------- */
+const ROLES = [
+  { id: 'customer', label: 'Customer', svg: '<path d="M10 13a4 4 0 1 0 0-.01M12 3v4M3 12h4M17 12h4M12 17v4"/>' },
+  { id: 'provider', label: 'Provider', svg: '<path d="M4 20l7-9M14 4l6 6M13 3l8 8-3 3-8-8z"/>' },
+  { id: 'admin', label: 'Admin', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6M9 8h6"/>' },
+];
+$('#roleNav').innerHTML = ROLES.map(r => `<button data-role="${r.id}" class="${r.id === 'customer' ? 'active' : ''}"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${r.svg}</svg>${r.label}</button>`).join('');
+function goRole(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'scr-' + id));
+  document.querySelectorAll('#roleNav button').forEach(b => b.classList.toggle('active', b.dataset.role === id));
+}
+$('#roleNav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) goRole(b.dataset.role); });
+
+/* ---------- Customer: marketplace ---------- */
+const CATS = ['All', 'Plumbing', 'Electrician', 'AC Repair', 'Cleaning', 'Beauty', 'Painting'];
+const PROS = [
+  { name: 'Rahim Khan', cat: 'Plumbing', rating: 4.9, jobs: 1240, price: '৳ 300+', eta: '30 min', c: '#14b8a6' },
+  { name: 'Sumon Islam', cat: 'Electrician', rating: 4.8, jobs: 980, price: '৳ 400+', eta: '45 min', c: '#fbbf24' },
+  { name: 'BD AC Care', cat: 'AC Repair', rating: 4.9, jobs: 1520, price: '৳ 800+', eta: 'Today', c: '#38bdf8' },
+  { name: 'CleanHome Bd', cat: 'Cleaning', rating: 4.7, jobs: 2100, price: '৳ 500+', eta: 'Today', c: '#a78bfa' },
+  { name: 'GlamTouch', cat: 'Beauty', rating: 4.9, jobs: 1680, price: '৳ 600+', eta: 'Today', c: '#f472b6' },
+  { name: 'ProPaint Pros', cat: 'Painting', rating: 4.6, jobs: 540, price: '৳ 2000+', eta: 'Tomorrow', c: '#fb923c' },
+];
+let activeCat = 'All';
+$('#catChips').innerHTML = CATS.map(c => `<button class="fchip ${c === 'All' ? 'active' : ''}" data-c="${c}">${c}</button>`).join('');
+$('#catChips').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if (!b) return;
+  activeCat = b.dataset.c;
+  document.querySelectorAll('#catChips .fchip').forEach(x => x.classList.toggle('active', x === b));
+  renderPros();
+});
+const initials = n => n.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+function renderPros() {
+  const list = PROS.filter(p => activeCat === 'All' || p.cat === activeCat);
+  $('#proList').innerHTML = list.map((p, i) => `
+    <div class="pro"><div class="avatar" style="background:${p.c}22;border:1px solid ${p.c}55;color:${p.c}">${initials(p.name)}</div>
+      <div class="pinfo"><b>${p.name}</b><div class="muted">${p.cat} · ★ ${p.rating} · ${p.jobs} jobs</div>
+        <div class="muted">${p.price} · Arrives ${p.eta}</div></div>
+      <button class="bookbtn" onclick="openBooking('${p.name}', '${p.cat}')">Book</button>
+    </div>`).join('');
+}
+const SLOTS = ['Today 2:00 PM', 'Today 4:30 PM', 'Today 6:00 PM', 'Tomorrow 10:00 AM', 'Tomorrow 1:00 PM', 'Tomorrow 5:30 PM'];
+let pickedSlot = 0, currentPro = '';
+window.openBooking = (name, cat) => {
+  currentPro = name; pickedSlot = 0;
+  $('#bmName').textContent = name;
+  $('#bmService').textContent = cat + ' — professional service at your doorstep';
+  $('#timeSlots').innerHTML = SLOTS.map((s, i) => `<button class="time ${i === 0 ? 'active' : ''}" onclick="pickSlot(${i}, this)">${s}</button>`).join('');
+  $('#bookingModal').classList.add('open');
+};
+window.pickSlot = (i, el) => { pickedSlot = i; document.querySelectorAll('.time').forEach(t => t.classList.toggle('active', t === el)); };
+window.closeBooking = () => $('#bookingModal').classList.remove('open');
+window.confirmBooking = () => { closeBooking(); showToast(`✓ Booked: ${currentPro} — ${SLOTS[pickedSlot]}`); };
+renderPros();
+
+/* ---------- Provider ---------- */
+let jobs = [
+  { id: '#J1024', svc: 'Pipe leakage — Dhanmondi 8/A', pay: 850, when: 'Today, 3:30 PM' },
+  { id: '#J1025', svc: 'Tap replacement — Mohammadpur', pay: 600, when: 'Today, 5:00 PM' },
+  { id: '#J1026', svc: 'Full bathroom fitting — Uttara', pay: 4500, when: 'Tomorrow, 11:00 AM' },
+];
+function renderJobs() {
+  $('#jobList').innerHTML = jobs.map((j, i) => `
+    <div class="job"><div><b>${j.id} — ৳${j.pay}</b><div class="muted">${j.svc}</div><div class="muted">${j.when}</div></div>
+      <button class="jbtn ok" onclick="acceptJob(${i})">Accept</button>
+    </div>`).join('');
+}
+window.acceptJob = i => { const j = jobs[i]; jobs.splice(i, 1); renderJobs(); showToast(`${j.id} accepted — customer notified 📱`); };
+renderJobs();
+
+/* ---------- Admin ---------- */
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ORD = [1420, 1680, 1590, 1740, 1890, 2260, 2140];
+const maxO = Math.max(...ORD);
+$('#adminBars').innerHTML = ORD.map(v => `<div class="bar" style="height:${(v / maxO) * 100}%"></div>`).join('');
+$('#adminBarsLbl').innerHTML = DAYS.map((d, i) => `<span class="barlbl">${d}<br><b style="color:var(--amber)">${ORD[i]}</b></span>`).join('');
+</script>
+</body>
+</html>

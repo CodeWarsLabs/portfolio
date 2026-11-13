@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dhaka Eats — Multi-Vendor Food Delivery (Interactive Demo)</title>
+<style>
+:root{--bg:#12080a;--card:#1d1013;--card2:#27161a;--line:#3a2026;--orange:#ff7a18;--yellow:#ffc233;--red:#ff4757;--text:#fdeee4;--dim:#c79c93;--green:#2ed573}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1100px 700px at 70% -10%,#3a1608 0%,transparent 55%),var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);display:flex;justify-content:center;min-height:100vh;padding:18px 10px}
+.app{width:100%;max-width:430px;background:var(--bg);border:1px solid var(--line);border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 8px #060208;display:flex;flex-direction:column;height:920px;max-height:96vh;position:relative}
+.ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--yellow);color:#331a00;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60;opacity:.95}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#ff7a18,#e8490f);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,122,24,.45)}
+.brand b{font-size:18px}.brand b span{color:var(--orange)}.brand small{display:block;font-size:10px;color:var(--dim);letter-spacing:2px;text-transform:uppercase}
+.cartbtn{position:relative;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text)}
+.cartcount{background:var(--orange);color:#1a0d00;font-weight:800;font-size:12px;border-radius:999px;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.screens{flex:1;overflow:hidden;position:relative}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:14px 14px 18px;display:none;scrollbar-width:thin}
+.screen.active{display:block;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1.scr{font-size:21px;margin:2px 0 10px}h1.scr small{color:var(--dim);font-size:11px;display:block;letter-spacing:1px;text-transform:uppercase}
+.banner{background:linear-gradient(120deg,#ff7a18,#ff4757);border-radius:16px;padding:14px 16px;margin-bottom:12px;box-shadow:0 10px 30px rgba(255,90,30,.35)}
+.banner b{font-size:16px;color:#fff}.banner p{font-size:11.5px;color:#ffe3d0;margin-top:2px}
+.searchbar{display:flex;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:12px;color:var(--dim);font-size:13px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px}
+.fchip{background:var(--card2);border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:7px 14px;font-size:12px;white-space:nowrap;cursor:pointer}
+.fchip.active{background:var(--orange);border-color:var(--orange);color:#1a0d00;font-weight:800}
+.resto{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
+.rimg{width:86px;height:86px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(145deg,#2c1a10,#1d1013);border:1px solid #432a1d}
+.rinfo{flex:1}.rinfo b{font-size:14.5px}.rinfo .muted{color:var(--dim);font-size:11.5px;margin:3px 0 5px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{font-size:10px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--dim)}
+.price{color:var(--yellow);font-weight:800}
+.addbtn{background:var(--orange);color:#1a0d00;border:none;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:12px}
+.card2{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.order{display:flex;justify-content:space-between;align-items:center;background:var(--card2);border-radius:12px;padding:10px 12px;margin-top:10px;gap:8px}
+.order b{font-size:13px}.order .muted{font-size:11px;color:var(--dim)}
+.oabtn{border:1px solid var(--line);background:none;color:var(--orange);border-radius:8px;padding:7px 10px;font-size:11px;cursor:pointer;white-space:nowrap;font-weight:700}
+.oabtn.ok{border-color:#1f4630;color:var(--green)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:var(--card2);border-radius:12px;padding:12px;text-align:center}.stat b{font-size:20px;color:var(--yellow)}.stat span{font-size:10px;color:var(--dim);display:block;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:110px;padding-top:8px;border-top:1px solid var(--line)}
+.bar{flex:1;background:linear-gradient(180deg,var(--orange),#b34700);border-radius:5px 5px 2px 2px;min-height:5px}
+.barlbl{flex:1;text-align:center;font-size:9.5px;color:var(--dim);margin-top:4px}
+.nav{display:flex;border-top:1px solid var(--line);background:#180d10;padding:8px 4px}
+.nav button{flex:1;background:none;border:none;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;cursor:pointer;padding:7px 0;font-family:inherit}
+.nav button.active{color:var(--orange)}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.modal{position:absolute;inset:0;background:rgba(5,2,3,.8);display:none;align-items:flex-end;z-index:40}
+.modal.open{display:flex;animation:fadein .25s ease}
+.msheet{background:var(--card);width:100%;border-radius:22px 22px 0 0;padding:18px;border-top:1px solid var(--line);max-height:75%;overflow-y:auto}
+.cartline{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.qtybtn{background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:8px;width:26px;height:26px;cursor:pointer}
+.totalrow{display:flex;justify-content:space-between;font-weight:800;font-size:16px;margin:12px 0;color:var(--yellow)}
+.checkout{width:100%;background:var(--green);color:#03240f;border:none;border-radius:14px;padding:14px;font-weight:800;font-size:15px;cursor:pointer}
+.toast{position:absolute;bottom:110px;left:50%;transform:translateX(-50%) translateY(16px);background:#0a2a1a;border:1px solid #1f6f3f;color:#7bf0a8;padding:9px 16px;border-radius:10px;font-size:12.5px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.rider-map{height:150px;border-radius:14px;margin-bottom:12px;background:radial-gradient(circle at 30% 40%,#1f2a1f 0 30px,transparent 31px),radial-gradient(circle at 70% 65%,#1f2a1f 0 24px,transparent 25px),linear-gradient(#141b14,#101510);border:1px solid #223024;position:relative;overflow:hidden}
+.route{position:absolute;left:15%;top:55%;width:70%;height:3px;background:repeating-linear-gradient(90deg,var(--yellow) 0 10px,transparent 10px 16px)}
+.pin{position:absolute;font-size:18px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="ribbon">DEMO</div>
+  <div class="hdr">
+    <div class="brand">
+      <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 11h16M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M5 11l1.5 9h11L19 11" stroke="#ffd9b8" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      <div><b>Dhaka<span>Eats</span></b><small>Multi-Vendor Platform</small></div>
+    </div>
+    <button class="cartbtn" onclick="toggleCart()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h2l2 12h10l2-8H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20" r="1.3" fill="currentColor"/><circle cx="16" cy="20" r="1.3" fill="currentColor"/></svg>
+      <span class="cartcount" id="cartCount">0</span>
+    </button>
+  </div>
+
+  <div class="screens">
+    <!-- CUSTOMER -->
+    <section class="screen active" id="scr-customer">
+      <div class="banner"><b>50% OFF first 3 orders</b><p>Code: DACHEATS50 · All restaurants, valid till Sunday</p></div>
+      <div class="searchbar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#c79c93" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#c79c93" stroke-width="2" stroke-linecap="round"/></svg>Search restaurants or dishes…</div>
+      <div class="chips" id="cuisineChips"></div>
+      <div id="restoList"></div>
+    </section>
+
+    <!-- VENDOR -->
+    <section class="screen" id="scr-vendor">
+      <h1 class="scr"><small>Khazana Biryani — Kitchen</small>Incoming Orders</h1>
+      <div class="stats">
+        <div class="stat"><b>47</b><span>Today's orders</span></div>
+        <div class="stat"><b>৳ 28.4k</b><span>Today's revenue</span></div>
+        <div class="stat"><b>4.8★</b><span>1,240 reviews</span></div>
+        <div class="stat"><b>9 min</b><span>Avg prep time</span></div>
+      </div>
+      <div id="vendorOrders"></div>
+    </section>
+
+    <!-- RIDER -->
+    <section class="screen" id="scr-rider">
+      <h1 class="scr"><small>Rider — Sabbir Rahman</small>Active Delivery</h1>
+      <div class="rider-map">
+        <div class="route"></div>
+        <div class="pin" style="left:12%;top:38%">🍽️</div>
+        <div class="pin" style="right:12%;top:55%">🏠</div>
+      </div>
+      <div class="card2"><div class="row"><div><b>Order #4821</b><p class="muted" style="color:var(--dim);font-size:12px">Khazana Biryani → House 17, Road 5, Dhanmondi</p></div><span class="price">৳ 680</span></div>
+        <button class="checkout" style="margin-top:10px" onclick="riderDelivered()">Mark as Delivered · Collect ৳ 680 (Cash)</button></div>
+      <div class="stats">
+        <div class="stat"><b>18</b><span>Deliveries today</span></div>
+        <div class="stat"><b>৳ 1,150</b><span>Earnings today</span></div>
+        <div class="stat"><b>৳ 27.3k</b><span>This month</span></div>
+        <div class="stat"><b>4.9★</b><span>Rating · 512 trips</span></div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="screen" id="scr-admin">
+      <h1 class="scr"><small>Super Admin Dashboard</small>Platform Overview</h1>
+      <div class="stats">
+        <div class="stat"><b>1,284</b><span>Orders today</span></div>
+        <div class="stat"><b>৳ 8.6L</b><span>GMV today</span></div>
+        <div class="stat"><b>312</b><span>Active restaurants</span></div>
+        <div class="stat"><b>1,940</b><span>Riders online</span></div>
+      </div>
+      <div class="card2"><b style="font-size:13px">Orders — Last 7 days</b><div class="bars" id="adminBars"></div><div class="row" style="margin-top:4px" id="adminBarsLbl"></div></div>
+    </section>
+  </div>
+
+  <div class="modal" id="cartModal">
+    <div class="msheet">
+      <div class="row" style="margin-bottom:10px"><b style="font-size:17px">Your Cart</b><button class="oabtn" onclick="toggleCart()">Close</button></div>
+      <div id="cartLines"></div>
+      <div class="totalrow"><span>Total</span><span id="cartTotal">৳ 0</span></div>
+      <button class="checkout" onclick="checkout()">Place Order — Cash on Delivery</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Done</div>
+
+  <nav class="nav" id="roleNav"></nav>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('dacheats_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('dacheats_' + k, JSON.stringify(v)) };
+const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); };
+
+/* ---------- Role nav ---------- */
+const ROLES = [
+  { id: 'customer', label: 'Customer', svg: '<path d="M6 8a6 6 0 0 1 12 0M4 20h16M6 12h12"/>' },
+  { id: 'vendor', label: 'Vendor', svg: '<path d="M4 10h16M6 10V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M5 10l2 10h10l2-10"/>' },
+  { id: 'rider', label: 'Rider', svg: '<circle cx="7" cy="17" r="2.4"/><circle cx="17" cy="17" r="2.4"/><path d="M3 17h2l3-7h6l2 5h5M8 10l3-6h4"/>' },
+  { id: 'admin', label: 'Admin', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6M9 8h6M9 16h4"/>' },
+];
+$('#roleNav').innerHTML = ROLES.map(r => `<button data-role="${r.id}" class="${r.id === 'customer' ? 'active' : ''}"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${r.svg}</svg>${r.label}</button>`).join('');
+function goRole(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'scr-' + id));
+  document.querySelectorAll('#roleNav button').forEach(b => b.classList.toggle('active', b.dataset.role === id));
+}
+$('#roleNav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) goRole(b.dataset.role); });
+
+/* ---------- Customer: restaurants + cart ---------- */
+const CUISINES = ['All', 'Biryani', 'Pizza', 'Burger', 'Chinese', 'Bangladeshi'];
+let activeCuisine = 'All';
+const RESTOS = [
+  { name: 'Khazana Biryani', cui: 'Biryani', rating: 4.8, time: '25–35 min', emoji: '🍛' },
+  { name: 'Pizza Republic', cui: 'Pizza', rating: 4.6, time: '30–40 min', emoji: '🍕' },
+  { name: 'Burger Lab', cui: 'Burger', rating: 4.5, time: '20–30 min', emoji: '🍔' },
+  { name: 'Wok Society', cui: 'Chinese', rating: 4.4, time: '35–45 min', emoji: '🥡' },
+  { name: 'Haji Saheb"s Kitchen', cui: 'Bangladeshi', rating: 4.9, time: '30–40 min', emoji: '🍲' },
+  { name: 'BBQ Tonight', cui: 'Bangladeshi', rating: 4.7, time: '40–50 min', emoji: '🔥' },
+];
+$('#cuisineChips').innerHTML = CUISINES.map(c => `<button class="fchip ${c === 'All' ? 'active' : ''}" data-c="${c}">${c}</button>`).join('');
+$('#cuisineChips').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if (!b) return;
+  activeCuisine = b.dataset.c;
+  document.querySelectorAll('#cuisineChips .fchip').forEach(x => x.classList.toggle('active', x === b));
+  renderRestos();
+});
+function renderRestos() {
+  const list = RESTOS.filter(r => activeCuisine === 'All' || r.cui === activeCuisine);
+  $('#restoList').innerHTML = list.map(r => `
+    <div class="resto"><div class="rimg">${r.emoji}</div>
+      <div class="rinfo"><b>${r.name}</b><div class="muted">${r.cui} · ★ ${r.rating} · ${r.time}</div>
+        <span class="pill">Free delivery</span></div>
+      <button class="addbtn" onclick="addToCart('${r.name}', 350)">৳350 +</button>
+    </div>`).join('');
+}
+let cart = store.get('cart', []);
+window.addToCart = (name, price) => { cart.push({ name, price }); store.set('cart', cart); renderCart(); showToast(`Added: ${name}`); };
+function renderCart() {
+  $('#cartCount').textContent = cart.length;
+  const total = cart.reduce((a, i) => a + i.price, 0);
+  $('#cartTotal').textContent = '৳ ' + total;
+  $('#cartLines').innerHTML = cart.length ? cart.map((i, idx) => `
+    <div class="cartline"><span>${i.name} — ৳${i.price}</span>
+      <button class="qtybtn" onclick="removeFromCart(${idx})">✕</button></div>`).join('')
+    : '<p style="color:var(--dim);padding:12px 0">Cart is empty — add something tasty!</p>';
+}
+window.removeFromCart = idx => { cart.splice(idx, 1); store.set('cart', cart); renderCart(); };
+window.toggleCart = () => $('#cartModal').classList.toggle('open');
+window.checkout = () => {
+  if (!cart.length) return showToast('Cart is empty!');
+  cart = []; store.set('cart', cart); renderCart(); toggleCart(); showToast('🎉 Order placed! Arriving in 30–40 min.');
+};
+renderRestos(); renderCart();
+
+/* ---------- Vendor ---------- */
+let vendorOrders = [
+  { id: '#4821', items: 'Kacchi 2 · Firni 1', total: 680, status: 'new' },
+  { id: '#4822', items: 'Chicken Tehari 3', total: 540, status: 'new' },
+  { id: '#4823', items: 'Beef Bhuna 1 · Salad 1', total: 420, status: 'prep' },
+];
+function renderVendor() {
+  $('#vendorOrders').innerHTML = vendorOrders.map((o, i) => `
+    <div class="order"><div><b>${o.id} — ৳${o.total}</b><p class="muted">${o.items}</p></div>
+      ${o.status === 'new'
+        ? `<button class="oabtn" onclick="vendorAccept(${i})">Accept</button>`
+        : `<button class="oabtn ok" onclick="vendorReady(${i})">Mark Ready</button>`}
+    </div>`).join('');
+}
+window.vendorAccept = i => { vendorOrders[i].status = 'prep'; renderVendor(); showToast(vendorOrders[i].id + ' accepted'); };
+window.vendorReady = i => { vendorOrders.splice(i, 1); renderVendor(); showToast('Order handed to rider'); };
+renderVendor();
+
+/* ---------- Rider ---------- */
+window.riderDelivered = () => showToast('✓ Delivered! ৳1,150 earned today — Great work!');
+
+/* ---------- Admin ---------- */
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ORD = [840, 1020, 960, 1210, 1150, 1480, 1284];
+const maxO = Math.max(...ORD);
+$('#adminBars').innerHTML = ORD.map(v => `<div class="bar" style="height:${(v / maxO) * 100}%"></div>`).join('');
+$('#adminBarsLbl').innerHTML = DAYS.map((d, i) => `<span class="barlbl">${d}<br><b style="color:var(--yellow)">${ORD[i]}</b></span>`).join('');
+</script>
+</body>
+</html>

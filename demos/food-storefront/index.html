@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dorkar Eats — Food Delivery Storefront (Interactive Demo)</title>
+<style>
+:root{--red:#e8412a;--red-d:#c22e1a;--cream:#fff8f0;--ink:#1e1410;--card:#ffffff;--line:#f0ded2;--gold:#ffc233}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);font-family:'Segoe UI',system-ui,sans-serif;color:var(--ink)}
+header{position:sticky;top:0;z-index:50;background:rgba(255,248,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.5px}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),#ff7a3c);display:flex;align-items:center;justify-content:center}
+.nav a{text-decoration:none;color:var(--ink);font-size:14px;margin-left:26px;font-weight:600}
+.nav a:hover{color:var(--red)}
+.cartbtn{display:flex;gap:8px;align-items:center;background:var(--red);color:#fff;border:none;border-radius:10px;padding:11px 20px;font-weight:800;cursor:pointer;font-family:inherit}
+.cartcount{background:var(--gold);color:var(--ink);border-radius:999px;min-width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;padding:0 7px}
+.wrap{max-width:1180px;margin:auto;padding:0 22px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:64px 0 56px}
+@media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}.hero .cta{justify-content:center}.hero-art{display:none}}
+.kick{color:var(--red);font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:12px}
+h1{font-size:52px;line-height:1.06;letter-spacing:-1.5px;margin:14px 0;font-weight:900}
+h1 em{font-style:normal;color:var(--red)}
+.sub{font-size:17px;color:#6b544a;max-width:46ch;line-height:1.55}
+.cta{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap}
+.btn{background:var(--red);color:#fff;border:none;border-radius:12px;padding:15px 30px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 14px 30px rgba(232,65,42,.35);font-family:inherit}
+.btn.ghost{background:#fff;color:var(--red);border:2px solid var(--red);box-shadow:none}
+.trust{display:flex;gap:22px;margin-top:28px;font-size:13px;color:#6b544a}
+.trust b{color:var(--ink);display:block;font-size:17px}
+.hero-art{background:linear-gradient(150deg,#ffdfcb,#ffd3b3);border-radius:28px;height:420px;display:flex;align-items:center;justify-content:center;font-size:150px;box-shadow:inset 0 0 60px rgba(232,65,42,.18)}
+.stats{background:#fff;border:1px solid var(--line);border-radius:18px;display:grid;grid-template-columns:repeat(4,1fr);margin:-20px auto 40px;max-width:1080px;padding:18px;text-align:center;box-shadow:0 20px 50px rgba(30,16,8,.08)}
+.stats b{font-size:24px;color:var(--red)}.stats span{font-size:11px;color:#8a7066;letter-spacing:.8px;text-transform:uppercase}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);gap:14px}}
+.section{padding:34px 0}
+.sechead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:18px}
+h2{font-size:32px;letter-spacing:-.8px;font-weight:900}
+.menu-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
+.mtab{background:#f6ece3;border:1px solid var(--line);border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:700;color:#6b544a;font-family:inherit}
+.mtab.active{background:var(--red);color:#fff;border-color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.dish{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .25s, box-shadow .25s}
+.dish:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(30,16,8,.14)}
+.dish .img{height:150px;display:flex;align-items:center;justify-content:center;font-size:64px;background:#fff3ea}
+.dish .body{padding:14px 16px}
+.dish b{font-size:15px}
+.dish .muted{color:#8a7066;font-size:12px;margin:5px 0 10px}
+.dish .row{display:flex;justify-content:space-between;align-items:center}
+.price{font-weight:900;color:var(--red);font-size:17px}
+.add{background:var(--red);color:#fff;border:none;width:34px;height:34px;border-radius:10px;font-size:19px;cursor:pointer;font-weight:800}
+.resto-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:8px}
+@media(max-width:900px){.resto-strip{grid-template-columns:repeat(3,1fr)}}
+.rchip{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 8px;text-align:center;font-size:36px}
+.rchip small{display:block;font-size:11px;color:#6b544a;margin-top:6px;font-weight:700}
+footer{background:var(--ink);color:#cdb4a6;margin-top:50px;padding:36px 0;text-align:center;font-size:13px}
+footer b{color:#fff}
+.drawer{position:fixed;top:0;right:-420px;width:390px;max-width:92vw;height:100vh;background:#fff;z-index:80;box-shadow:-20px 0 60px rgba(0,0,0,.25);transition:right .3s;display:flex;flex-direction:column;padding:22px}
+.drawer.open{right:0}
+.drawer h3{margin-bottom:12px}
+.cline{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;gap:8px}
+.cline button{background:#f6ece3;border:none;border-radius:8px;width:26px;height:26px;cursor:pointer;font-weight:800}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ink);color:#ffd8c2;padding:11px 20px;border-radius:12px;font-size:13px;opacity:0;transition:all .25s;z-index:90;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ribbon{position:fixed;top:64px;right:-34px;background:var(--gold);color:#332100;font-size:10px;font-weight:900;letter-spacing:2px;padding:4px 40px;transform:rotate(45deg);z-index:70}
+</style>
+</head>
+<body>
+<div class="ribbon">DEMO</div>
+<header>
+  <div class="nav">
+    <div class="logo"><div class="mark"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 11h16M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M5 11l1.5 9h11L19 11" stroke="#fff" stroke-width="1.9" stroke-linejoin="round"/></svg></div>Dorkar<span style="color:var(--red)">Eats</span></div>
+    <nav><a href="#menu">Menu</a><a href="#partners">Restaurants</a><a href="#offers">Offers</a></nav>
+    <button class="cartbtn" onclick="toggleDrawer()">Cart <span class="cartcount" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<section class="hero wrap" id="top">
+  <div>
+    <div class="kick">Dhaka's #1 Delivery Platform</div>
+    <h1>Restaurant food,<br><em>delivered hot.</em></h1>
+    <p class="sub">300+ restaurants, 40-minute average delivery, live tracking on every order. Order your cravings — from biryani at midnight to breakfast at 7.</p>
+    <div class="cta">
+      <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Order Now — 50% Off</button>
+      <button class="btn ghost" onclick="toast('Partner application form coming right up!')">Become a Partner</button>
+    </div>
+    <div class="trust"><div><b>4.8★</b>86k ratings</div><div><b>300+</b>Restaurants</div><div><b>40 min</b>Avg delivery</div></div>
+  </div>
+  <div class="hero-art">🍔</div>
+</section>
+
+<div class="stats wrap"><div><b>12.4k</b><span>Happy customers</span></div><div><b>310</b><span>Partner restaurants</span></div><div><b>1.2L</b><span>Orders delivered</span></div><div><b>98%</b><span>On-time delivery</span></div></div>
+
+<section class="section wrap" id="partners">
+  <div class="sechead"><h2>Top Partners</h2><span style="color:#8a7066">Tap a dish, add it to cart →</span></div>
+  <div class="resto-strip">
+    <div class="rchip">🍛<small>Khazana Biryani</small></div>
+    <div class="rchip">🍕<small>Pizza Republic</small></div>
+    <div class="rchip">🍔<small>Burger Lab</small></div>
+    <div class="rchip">🥡<small>Wok Society</small></div>
+    <div class="rchip">🍲<small>Haji Saheb's</small></div>
+    <div class="rchip">🔥<small>BBQ Tonight</small></div>
+  </div>
+</section>
+
+<section class="section wrap" id="menu">
+  <div class="sechead"><h2>Signature Dishes</h2><span style="color:#8a7066">Prices include delivery</span></div>
+  <div class="menu-tabs" id="menuTabs"></div>
+  <div class="grid" id="dishGrid"></div>
+</section>
+
+<footer id="offers">
+  <div class="wrap"><b>DorkarEats</b> · Multi-vendor food delivery — website + apps<br>Dhaka, Bangladesh · hello@dorkareats.com · 24/7 support: 16247<br><br>Interactive demo by <b>CodeWars Labs</b> — built with HTML/CSS/JS</div>
+</footer>
+
+<div class="drawer" id="cartDrawer">
+  <h3>Your Cart</h3>
+  <div id="cartLines" style="flex:1;overflow-y:auto"></div>
+  <div style="display:flex;justify-content:space-between;font-weight:900;font-size:18px;margin:14px 0"><span>Total</span><span id="cartTotal">৳0</span></div>
+  <button class="btn" style="width:100%" onclick="checkout()">Place Order — ৳60 Delivery Free Today</button>
+  <button class="btn ghost" style="width:100%;margin-top:10px" onclick="toggleDrawer()">Continue Browsing</button>
+</div>
+<div class="toast" id="toast">Done</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('dorkareats_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('dorkareats_' + k, JSON.stringify(v)) };
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); };
+const TABS = ['All', 'Biryani', 'Pizza', 'Burger', 'Chinese', 'Drinks'];
+let tab = 'All';
+const DISHES = [
+  { n: 'Kacchi Biryani (Full)', d: 'Khazana Biryani · Slow-cooked mutton', p: 350, cat: 'Biryani', e: '🍛' },
+  { n: 'Chicken Tehari', d: 'Haji Saheb’s · The old Dhaka way', p: 180, cat: 'Biryani', e: '🍚' },
+  { n: 'Beef Bhuna', d: 'BBQ Tonight · With paratha', p: 420, cat: 'Biryani', e: '🍲' },
+  { n: 'Pepperoni Feast 12”', d: 'Pizza Republic · Loaded pepperoni', p: 750, cat: 'Pizza', e: '🍕' },
+  { n: 'BBQ Chicken Pizza 10”', d: 'Pizza Republic · Smoky BBQ sauce', p: 520, cat: 'Pizza', e: '🍕' },
+  { n: 'Classic Beef Smash', d: 'Burger Lab · Double smash + fries', p: 380, cat: 'Burger', e: '🍔' },
+  { n: 'Chicken Zinger Burger', d: 'Burger Lab · Crispy fried chicken', p: 320, cat: 'Burger', e: '🍔' },
+  { n: 'Kung Pao Chicken', d: 'Wok Society · Wok-fired, spicy', p: 390, cat: 'Chinese', e: '🥡' },
+  { n: 'Chicken Chowmein', d: 'Wok Society · Street-style noodles', p: 260, cat: 'Chinese', e: '🍜' },
+  { n: 'Mango Lassi 500ml', d: 'House-made · Seasonal', p: 150, cat: 'Drinks', e: '🥭' },
+];
+let cart = store.get('cart', []);
+$('#menuTabs').innerHTML = TABS.map(t => `<button class="mtab ${t === 'All' ? 'active' : ''}" data-t="${t}">${t}</button>`).join('');
+$('#menuTabs').addEventListener('click', e => {
+  const b = e.target.closest('.mtab'); if (!b) return;
+  tab = b.dataset.t;
+  document.querySelectorAll('.mtab').forEach(x => x.classList.toggle('active', x === b));
+  renderDishes();
+});
+function renderDishes() {
+  const list = DISHES.filter(d => tab === 'All' || d.cat === tab);
+  $('#dishGrid').innerHTML = list.map(d => `
+    <div class="dish"><div class="img">${d.e}</div><div class="body"><b>${d.n}</b><div class="muted">${d.d}</div>
+      <div class="row"><span class="price">৳${d.p}</span><button class="add" onclick="addToCart('${d.n.replace(/'/g, "\\'")}', ${d.p})">+</button></div></div></div>`).join('');
+}
+window.addToCart = (name, price) => { cart.push({ name, price }); store.set('cart', cart); renderCart(); toast('Added: ' + name.slice(0, 30)); };
+function renderCart() {
+  $('#cartCount').textContent = cart.length;
+  const total = cart.reduce((a, i) => a + i.price, 0);
+  $('#cartTotal').textContent = '৳' + total;
+  $('#cartLines').innerHTML = cart.length ? cart.map((i, idx) => `
+    <div class="cline"><span>${i.name}<br><b>৳${i.price}</b></span><button onclick="removeItem(${idx})">✕</button></div>`).join('')
+    : '<p style="color:#8a7066;padding:16px 0">Your cart is empty — add something delicious!</p>';
+}
+window.removeItem = idx => { cart.splice(idx, 1); store.set('cart', cart); renderCart(); };
+window.toggleDrawer = () => $('#cartDrawer').classList.toggle('open');
+window.checkout = () => {
+  if (!cart.length) return toast('Cart is empty!');
+  cart = []; store.set('cart', cart); renderCart(); toggleDrawer(); toast('Order placed! ETA 35–45 min — we’ll text updates.');
+};
+renderDishes(); renderCart();
+</script>
+</body>
+</html>

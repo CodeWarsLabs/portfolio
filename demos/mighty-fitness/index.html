@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mighty Fitness — Fitness & Wellness (Interactive Demo)</title>
+<style>
+:root{
+  --bg:#0a0f1a; --card:#121a2b; --card2:#182136; --line:#223051;
+  --green:#22c55e; --green-d:#15803d; --blue:#38bdf8; --amber:#fbbf24; --red:#f87171;
+  --text:#e9eefb; --dim:#8596b8; --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 800px at 70% -10%, #13243f 0%, transparent 55%),var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);display:flex;justify-content:center;min-height:100vh;padding:18px 10px}
+.app{width:100%;max-width:430px;background:var(--bg);border:1px solid var(--line);border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 8px #060a12;display:flex;flex-direction:column;height:920px;max-height:96vh}
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#22c55e,#15803d);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(34,197,94,.4)}
+.logo svg{width:22px;height:22px}
+.brand b{font-size:19px;letter-spacing:.5px}
+.brand b span{color:var(--green)}
+.brand small{display:block;font-size:10.5px;color:var(--dim);letter-spacing:2px;text-transform:uppercase}
+.streak{display:flex;align-items:center;gap:6px;background:#1c1608;border:1px solid #3a2c07;border-radius:999px;padding:6px 12px;font-size:13px;color:var(--amber);font-weight:700}
+/* Screens */
+.screens{flex:1;overflow:hidden;position:relative}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:16px 16px 90px;display:none;scrollbar-width:thin}
+.screen.active{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1.scr{font-size:22px;margin:2px 0 12px;letter-spacing:.3px}
+h1.scr small{color:var(--dim);font-size:12px;font-weight:400;display:block;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.card.glow{background:linear-gradient(150deg,#122b1e 0%,var(--card) 60%);border-color:#1f4630}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.muted{color:var(--dim);font-size:12.5px}
+/* Rings */
+.rings{display:flex;gap:12px;justify-content:space-around;margin-top:6px}
+.ringbox{text-align:center}
+.ringbox svg{transform:rotate(-90deg)}
+.ringval{font-size:14px;font-weight:800;margin-top:2px}
+.ringlab{font-size:10.5px;color:var(--dim);letter-spacing:1px;text-transform:uppercase}
+/* Week chart */
+.week{display:flex;align-items:flex-end;gap:10px;height:110px;margin-top:10px;padding-top:6px;border-top:1px solid #1b2438}
+.wbar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.wbar i{width:100%;max-width:34px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--green),var(--green-d));min-height:6px;transition:height 1s}
+.wbar span{font-size:10px;color:var(--dim)}
+.wbar.today i{background:linear-gradient(180deg,var(--amber),#b45309);box-shadow:0 0 12px rgba(251,191,36,.35)}
+/* Water */
+.water{display:flex;gap:8px;margin-top:8px}
+.drop{width:34px;height:44px;cursor:pointer;transition:all .2s;opacity:.35}
+.drop.full{opacity:1;filter:drop-shadow(0 0 6px rgba(56,189,248,.6))}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#05230f;border:none;border-radius:12px;padding:11px 20px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;letter-spacing:.3px}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
+.btn.small{padding:8px 14px;font-size:12.5px}
+.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--dim);letter-spacing:.5px}
+.pill.hot{color:#fda4af;border-color:#4c1d24}
+/* Workouts */
+.workout{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:12px}
+.wic{width:64px;height:64px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.wic svg{width:34px;height:34px}
+.wic.burn{background:#2b1218}.wic.strength{background:#121f33}.wic.yoga{background:#131c2f}.wic.cardio{background:#241a08}
+.winfo{flex:1}
+.winfo b{font-size:15px}
+.winfo .muted{margin:2px 0 6px}
+/* Nutrition */
+.macro{margin:8px 0}
+.macro .row{margin-bottom:3px}
+.bar{height:9px;background:#1b2438;border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px;transition:width 1.2s}
+.meals{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.meal{display:flex;gap:10px;align-items:center;background:var(--card2);border-radius:12px;padding:10px 12px}
+.meal b{font-size:13px}
+.meal .cal{margin-left:auto;color:var(--amber);font-weight:800;font-size:13px}
+/* Progress */
+canvas{width:100%;height:150px}
+.bmi{display:flex;gap:10px;margin-top:8px}
+.bmi input{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px;font-size:14px;font-family:inherit;min-width:0}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:var(--card2);border-radius:12px;padding:10px;text-align:center}
+.stat b{font-size:20px;color:var(--green)}
+.stat span{font-size:10px;color:var(--dim);display:block;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+/* Coach */
+.chat{display:flex;flex-direction:column;gap:10px;padding:6px 2px 4px}
+.bubble{max-width:82%;padding:10px 13px;border-radius:16px;font-size:13.5px;line-height:1.45;animation:fadein .3s ease}
+.bubble.you{align-self:flex-end;background:#123a5e;border:1px solid #1e4d78;border-bottom-right-radius:4px}
+.bubble.coach{align-self:flex-start;background:#12261a;border:1px solid #1f4630;border-bottom-left-radius:4px}
+.typing{display:inline-flex;gap:4px;padding:2px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.chatbar{display:flex;gap:8px;margin-top:10px}
+.chatbar input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--text);font-family:inherit;font-size:13.5px;min-width:0}
+.send{width:46px;border:none;border-radius:12px;background:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.send svg{width:20px;height:20px;fill:#05230f}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{font-size:11.5px;color:var(--blue);border:1px solid #16405c;background:#0d2233;border-radius:999px;padding:6px 11px;cursor:pointer}
+/* Bottom nav */
+.nav{display:flex;border-top:1px solid var(--line);background:#0d1322;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:none;border:none;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;letter-spacing:.5px;cursor:pointer;padding:6px 0;font-family:inherit}
+.nav button svg{width:22px;height:22px;stroke:var(--dim);fill:none;stroke-width:2;transition:all .2s}
+.nav button.active{color:var(--green)}
+.nav button.active svg{stroke:var(--green);filter:drop-shadow(0 0 6px rgba(34,197,94,.5))}
+/* Toast */
+.toast{position:absolute;bottom:120px;left:50%;transform:translateX(-50%) translateY(20px);background:#05230f;border:1px solid #1f6f3f;color:#7bf0a8;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:all .3s;z-index:50;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Modal */
+.modal{position:absolute;inset:0;background:rgba(4,8,16,.78);display:none;align-items:center;justify-content:center;z-index:40;backdrop-filter:blur(3px)}
+.modal.open{display:flex;animation:fadein .3s ease}
+.mbox{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;width:88%;text-align:center}
+.timer{font-size:64px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--amber);margin:10px 0;text-shadow:0 0 30px rgba(251,191,36,.35)}
+.exlist{text-align:left;font-size:13px;color:var(--dim);margin:10px 0;display:flex;flex-direction:column;gap:6px}
+.exlist div.done{color:var(--green);text-decoration:line-through}
+.exlist div.cur{color:var(--amber)}
+/* Wow extras */
+.orb{position:fixed;border-radius:50%;filter:blur(90px);z-index:0;pointer-events:none;opacity:.5}
+.orb-a{width:280px;height:280px;background:#0e4d2e;top:-80px;left:-80px;animation:orbFloat 11s ease-in-out infinite alternate}
+.orb-b{width:220px;height:220px;background:#1e3a5f;bottom:-70px;right:-60px;animation:orbFloat 13s ease-in-out infinite alternate-reverse}
+.orb-c{width:150px;height:150px;background:#3a2a05;top:40%;right:-70px;animation:orbFloat 15s ease-in-out infinite alternate}
+@keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,-50px) scale(1.12)}}
+.app{position:relative;z-index:1}
+.card,.workout{transition:transform .25s ease,border-color .25s ease}
+.card:hover,.workout:hover{transform:translateY(-3px);border-color:#2f4a77}
+.logo{animation:logoPulse 2.6s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 14px rgba(34,197,94,.35)}50%{box-shadow:0 0 26px rgba(34,197,94,.65)}}
+.brand b span{background:linear-gradient(90deg,#22c55e,#7bf0a8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* Breathing circle */
+.breathwrap{display:flex;align-items:center;gap:14px;margin-top:10px}
+.breath{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#164e63,#0e3a4a 70%);border:2px solid #22d3ee55;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI';font-size:12px;color:#7de3ff;letter-spacing:1px;transform:scale(.75);transition:transform 4s ease;flex-shrink:0;cursor:pointer;text-align:center;line-height:1.5}
+.breath.inhale{transform:scale(1.12)}
+.breath.hold{transform:scale(1.12)}
+.breath.exhale{transform:scale(.75)}
+/* Filter chips */
+.filterbar{display:flex;gap:10px;margin:0 0 14px}
+.fchip{background:var(--card2);border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:8px 20px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .25s;letter-spacing:.4px}
+.fchip.active{background:var(--green);border-color:var(--green);color:#05230f;font-weight:800;box-shadow:0 0 16px rgba(34,197,94,.4)}
+.fchip[data-cat="Yoga"].active{background:#a78bfa;border-color:#a78bfa;color:#1e1145;box-shadow:0 0 16px rgba(167,139,250,.4)}
+.wic.yoga2{background:#1c1430}
+.wic.yoga3{background:#0e2423}
+.wic.yoga4{background:#241a08}
+.wic.medit{background:#101a2e}
+.demo-ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--amber);color:#241300;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60;opacity:.92}
+</style>
+</head>
+<body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app" id="app">
+  <div class="demo-ribbon">DEMO</div>
+
+  <div class="hdr">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="#05230f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div><b>Mighty<span>Fit</span></b><small>Fitness & Wellness — Interactive Demo</small></div>
+    </div>
+    <div class="streak">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2s5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5s.5 1.5 2 1.5C10.5 6 12 2 12 2Z" stroke="#fbbf24" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <span id="streakDays">5</span> day streak
+    </div>
+  </div>
+
+  <div class="screens">
+
+    <!-- ============ HOME ============ -->
+    <section class="screen active" id="scr-home">
+      <h1 class="scr"><small>Good evening</small>Rahim, let's move! 💪</h1>
+
+      <div class="card glow">
+        <div class="row"><b>Today's Goals</b><span class="pill hot">🔥 On fire</span></div>
+        <div class="rings" id="rings"></div>
+      </div>
+
+      <div class="card">
+        <div class="row"><b>Today's Yoga — 4 min Breath</b><span class="pill" style="color:#c4b5fd;border-color:#2e2355">Calm</span></div>
+        <div class="breathwrap">
+          <div class="breath" id="breathCircle">TAP<br>TO BEGIN</div>
+          <div class="muted" style="line-height:1.6">4s inhale → 4s hold → 4s exhale.<br>Follow the circle — it fills in, holds, then releases.<br><b style="color:#7de3ff" id="breathPhase">Ready when you are.</b></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row"><b>This Week — Active Minutes</b><span class="muted">164 min total</span></div>
+        <div class="week" id="weekBars"></div>
+      </div>
+
+      <div class="card">
+        <div class="row"><b>Water Intake</b><span class="muted" id="waterCount">4 / 8 glasses</span></div>
+        <div class="water" id="waterDrops"></div>
+      </div>
+
+      <button class="btn" style="width:100%;justify-content:center" onclick="goScreen('workout')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Start Today's Workout
+      </button>
+    </section>
+
+    <!-- ============ WORKOUTS ============ -->
+    <section class="screen" id="scr-workout">
+      <h1 class="scr"><small>Training + Yoga</small>Programs</h1>
+      <div class="filterbar">
+        <button class="fchip active" data-cat="All">All</button>
+        <button class="fchip" data-cat="Fitness">Fitness</button>
+        <button class="fchip" data-cat="Yoga">Yoga</button>
+      </div>
+      <div id="workoutList"></div>
+      <div class="card">
+        <b style="font-size:13.5px">🤖 AI Recommendation</b>
+        <p class="muted" style="margin-top:6px;line-height:1.5">Best split for you right now: <b style="color:var(--red)">Fat Burn HIIT</b> today (you crushed Cardio Blast on Tuesday), then <b style="color:#a78bfa">Yoga Recovery Flow</b> tomorrow for mobility, then <b style="color:var(--green)">Strength Upper Body</b>. Yoga days aren't rest days — they build range and keep you consistent.</p>
+      </div>
+    </section>
+
+    <!-- ============ NUTRITION ============ -->
+    <section class="screen" id="scr-nutrition">
+      <h1 class="scr"><small>Fuel</small>Nutrition Today</h1>
+
+      <div class="card">
+        <div class="row"><b>Calories</b><span class="muted"><span id="calNow" style="color:var(--amber);font-weight:800">1240</span> / 1800 kcal</span></div>
+        <div class="bar" style="margin-top:8px"><i id="calBar" style="width:69%;background:linear-gradient(90deg,var(--amber),#f97316)"></i></div>
+        <div class="macro"><div class="row"><span class="muted">Protein</span><span class="muted"><span id="pNow">78</span>/120 g</span></div><div class="bar"><i id="pBar" style="width:65%;background:var(--blue)"></i></div></div>
+        <div class="macro"><div class="row"><span class="muted">Carbs</span><span class="muted"><span id="cNow">140</span>/220 g</span></div><div class="bar"><i id="cBar" style="width:64%;background:var(--green)"></i></div></div>
+        <div class="macro"><div class="row"><span class="muted">Fat</span><span class="muted"><span id="fNow">38</span>/65 g</span></div><div class="bar"><i id="fBar" style="width:58%;background:var(--red)"></i></div></div>
+      </div>
+
+      <div class="row" style="margin:4px 2px 8px"><b style="font-size:14px">Meals</b><button class="btn small ghost" onclick="addMeal('Snack')">+ Add snack</button></div>
+      <div class="meals" id="mealList"></div>
+    </section>
+
+    <!-- ============ PROGRESS ============ -->
+    <section class="screen" id="scr-progress">
+      <h1 class="scr"><small>Journey</small>Your Progress</h1>
+
+      <div class="card">
+        <b style="font-size:13.5px">Weight — Last 8 Weeks</b>
+        <canvas id="weightChart" height="150"></canvas>
+        <div class="row" style="margin-top:4px"><span class="muted">Start 84.2 kg</span><b style="color:var(--green)">Now 79.6 kg (−4.6)</b></div>
+      </div>
+
+      <div class="card">
+        <b style="font-size:13.5px">BMI Calculator</b>
+        <div class="bmi">
+          <input id="bmiW" type="number" placeholder="Weight (kg)" value="79.6" min="20" max="300">
+          <input id="bmiH" type="number" placeholder="Height (cm)" value="172" min="100" max="250">
+          <button class="btn small" onclick="calcBMI()">Calc</button>
+        </div>
+        <div id="bmiResult" class="muted" style="margin-top:10px;font-size:14px"></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>214</b><span>Workouts</span></div>
+        <div class="stat"><b>86k</b><span>Kcal Burned</span></div>
+        <div class="stat"><b>1,240</b><span>Km Jogged</span></div>
+      </div>
+    </section>
+
+    <!-- ============ COACH ============ -->
+    <section class="screen" id="scr-coach">
+      <h1 class="scr"><small>Always on</small>AI Coach</h1>
+      <div class="chat" id="chatBox"></div>
+      <div class="chips" id="quickChips"></div>
+      <form class="chatbar" onsubmit="sendChat(event)">
+        <input id="chatInput" placeholder="Ask anything — workout, meals, plateau…" autocomplete="off">
+        <button class="send" type="submit" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Workout modal -->
+  <div class="modal" id="workoutModal">
+    <div class="mbox">
+      <b id="wmTitle" style="font-size:17px">Fat Burn HIIT</b>
+      <div class="timer" id="wmTimer">20:00</div>
+      <div class="exlist" id="wmExList"></div>
+      <div class="row" style="justify-content:center;gap:12px">
+        <button class="btn ghost" onclick="closeWorkout()">Cancel</button>
+        <button class="btn" id="wmToggle" onclick="toggleWorkout()">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <nav class="nav" id="bottomNav"></nav>
+</div>
+
+<script>
+/* ================= Mighty Fitness — Interactive Demo by CodeWars Labs ================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const store = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem('pulsefit_' + k)) ?? d } catch { return d } },
+  set(k, v) { try { localStorage.setItem('pulsefit_' + k, JSON.stringify(v)) } catch {} }
+};
+const showToast = msg => { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); };
+
+/* ---------- Bottom navigation ---------- */
+const TABS = [
+  { id: 'home', label: 'Home', svg: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/>' },
+  { id: 'workout', label: 'Workout', svg: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>' },
+  { id: 'nutrition', label: 'Fuel', svg: '<path d="M12 21c-5 0-8-3.5-8-9 4 0 6-2 8-6 2 4 4 6 8 6 0 5.5-3 9-8 9Z"/>' },
+  { id: 'progress', label: 'Progress', svg: '<path d="M4 19h16M6 16l4-5 4 4 5-7"/>' },
+  { id: 'coach', label: 'Coach', svg: '<path d="M21 12a7 7 0 0 1-7 7H8l-5 4 1.5-4.5A7 7 0 1 1 21 12Z"/>' },
+];
+$('#bottomNav').innerHTML = TABS.map(t => `<button data-tab="${t.id}" class="${t.id === 'home' ? 'active' : ''}"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${t.svg}</svg>${t.label}</button>`).join('');
+function goScreen(id) {
+  $$('.screen').forEach(s => s.classList.toggle('active', s.id === 'scr-' + id));
+  $$('#bottomNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+}
+$('#bottomNav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) goScreen(b.dataset.tab); });
+
+/* ---------- Home: rings, week, streak, water ---------- */
+const RINGS = [
+  { label: 'Kcal', val: 1240, goal: 1800, unit: '', color: '#fbbf24' },
+  { label: 'Steps', val: 6400, goal: 10000, unit: 'k', color: '#22c55e', fmt: v => (v/1000).toFixed(1) + 'k' },
+  { label: 'Protein', val: 78, goal: 120, unit: 'g', color: '#38bdf8' },
+];
+$('#rings').innerHTML = RINGS.map(r => {
+  const pct = Math.min(1, r.val / r.goal), R = 34, CIRC = 2 * Math.PI * R;
+  return `<div class="ringbox"><svg width="88" height="88" viewBox="0 0 88 88">
+    <circle cx="44" cy="44" r="${R}" stroke="#1b2438" stroke-width="9" fill="none"/>
+    <circle cx="44" cy="44" r="${R}" stroke="${r.color}" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC * (1 - pct)}" style="transition:stroke-dashoffset 1.4s ease"/>
+  </svg><div class="ringval">${r.fmt ? r.fmt(r.val) : r.val}<span style="color:var(--dim);font-size:10px">/${r.fmt ? r.fmt(r.goal) : r.goal}${r.unit && !r.fmt ? r.unit : ''}</span></div><div class="ringlab">${r.label}</div></div>`;
+}).join('');
+
+const WEEK = [32, 45, 20, 58, 15, 40, 55];
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const todayIdx = (new Date().getDay() + 6) % 7;
+$('#weekBars').innerHTML = WEEK.map((v, i) => `<div class="wbar ${i === todayIdx ? 'today' : ''}"><i style="height:${(v / 60) * 100}%"></i><span>${DAYS[i]}</span></div>`).join('');
+$('#streakDays').textContent = store.get('streak', 5);
+
+let water = store.get('water', 4);
+const renderWater = () => {
+  $('#waterCount').textContent = `${water} / 8 glasses`;
+  $('#waterDrops').innerHTML = Array.from({ length: 8 }, (_, i) =>
+    `<svg class="drop ${i < water ? 'full' : ''}" viewBox="0 0 24 32" onclick="setWater(${i + 1 === water ? i : i + 1})"><path d="M12 1C12 1 4 13 4 20a8 8 0 0 0 16 0C20 13 12 1 12 1Z" fill="${i < water ? '#38bdf8' : '#16233d'}" stroke="#1e4d78" stroke-width="1.4"/></svg>`
+  ).join('');
+};
+window.setWater = n => { water = n; store.set('water', water); renderWater(); if (water === 8) showToast('💧 Hydration goal complete!'); };
+renderWater();
+
+/* ---------- Workouts ---------- */
+const WORKOUTS = [
+  { name: 'Fat Burn HIIT', meta: '20 min · High intensity · 380 kcal', level: 'Intermediate', cls: 'burn', cat: 'Fitness', exercises: ['Jumping jacks — 45s', 'Squat to press — 45s', 'Mountain climbers — 45s', 'Rest — 30s', 'Burpees — 45s', 'High knees — 45s', 'Plank — 60s'], svg: '<path d="M12 2s5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5s.5 1.5 2 1.5C10.5 6 12 2 12 2Z" stroke="#f87171" stroke-width="1.8" stroke-linejoin="round"/>' },
+  { name: 'Strength — Upper Body', meta: '45 min · Strength · 420 kcal', level: 'Advanced', cls: 'strength', cat: 'Fitness', exercises: ['Bench press — 4×8', 'Bent-over row — 4×8', 'Overhead press — 3×10', 'Weighted dips — 3×10', 'Barbell curl — 3×12'], svg: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>' },
+  { name: 'Cardio Blast Run', meta: '30 min · Cardio · 450 kcal', level: 'Intermediate', cls: 'cardio', cat: 'Fitness', exercises: ['Warm-up jog — 5 min', 'Interval run 1 — 8 min', 'Recovery walk — 3 min', 'Interval run 2 — 8 min', 'Cool-down — 6 min'], svg: '<path d="M4 19h16M6 16l4-5 4 4 5-7" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { name: 'Sun Salutation Flow — Surya Namaskar', meta: '12 min · Yoga · 180 kcal · 12 postures ×2 rounds', level: 'All levels', cls: 'yoga2', cat: 'Yoga', exercises: ['Pranamasana (prayer pose) — 30s', 'Hasta Uttanasana — 30s', 'Uttanasana (forward fold) — 30s', 'Ashwa Sanchalanasana — 30s', 'Dandasana (plank) — 30s', 'Ashtanga Namaskara — 20s', 'Bhujangasana (cobra) — 30s', 'Adho Mukha Shvanasana — 40s', 'Ashwa Sanchalanasana — 30s', 'Uttanasana — 30s', 'Hasta Uttanasana — 30s', 'Tadasana — 30s'], svg: '<path d="M12 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 18 4-8 4 3 4-5 4 10" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { name: 'Power Yoga — Core & Balance', meta: '30 min · Yoga · 240 kcal', level: 'Intermediate', cls: 'yoga3', cat: 'Yoga', exercises: ['Navasana (boat) — 45s ×3', 'Vasisthasana (side plank) — 40s each', 'Ardha Chandrasana (half moon) — 40s each', 'Virabhadrasana III — 30s each', 'Phalakasana hold — 60s ×2'], svg: '<path d="M12 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-7 18 5-9 2 3 3-6 5 12" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { name: 'Yoga for Back Pain Relief', meta: '20 min · Yoga · 110 kcal · Physio-focused', level: 'Beginner', cls: 'yoga4', cat: 'Yoga', exercises: ['Supta Matsyendrasana (supine twist) — 2 min', 'Balasana (child’s pose) — 2 min', 'Setu Bandhasana (bridge) — 10 × 30s hold', 'Marjaryasana (cat-cow) — 2 min', 'Supta Padangusthasana — 2 min each side', 'Viparita Karani — 4 min'], svg: '<path d="M4 14c2-3 4-3 6 0s4 3 6 0 4-3 4-3" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="6" r="2.4" stroke="#fbbf24" stroke-width="1.8"/>' },
+  { name: 'Yoga Recovery Flow', meta: '15 min · Yoga · Low intensity · 120 kcal', level: 'All levels', cls: 'yoga', cat: 'Yoga', exercises: ['Child’s pose — 2 min', 'Cat-cow — 2 min', 'Downward dog — 2 min', 'Pigeon stretch — 3 min', 'Savasana — 4 min'], svg: '<path d="M12 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-6 18 3-7 3 2 3-4 3 9" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { name: 'Meditation & Pranayama — Calm Mind', meta: '10 min · Meditation · 60 kcal', level: 'All levels', cls: 'medit', cat: 'Yoga', exercises: ['Diaphragmatic breathing — 2 min', 'Box breathing 4-4-4-4 — 3 min', 'Nadi Shodhana (alternate nostril) — 3 min', 'Body scan meditation — 2 min'], svg: '<path d="M12 21c-4 0-6.5-2-6.5-6 0-6 6.5-9 6.5-9s6.5 3 6.5 9c0 4-2.5 6-6.5 6Z" stroke="#7de3ff" stroke-width="1.7" stroke-linejoin="round"/>' },
+];
+function renderWorkouts(cat) {
+  document.querySelectorAll('#workoutList').forEach(el => el.innerHTML = WORKOUTS.filter(w => cat === 'All' || w.cat === cat).map(w => {
+    const i = WORKOUTS.indexOf(w);
+    return `
+  <div class="workout" data-cat="${w.cat}">
+    <div class="wic ${w.cls}"><svg viewBox="0 0 24 24" fill="none">${w.svg}</svg></div>
+    <div class="winfo"><b>${w.name}</b><div class="muted">${w.meta}</div><span class="pill">${w.level}</span></div>
+    <button class="btn small" onclick="openWorkout(${i})">Start</button>
+  </div>`;
+  }).join(''));
+}
+renderWorkouts('All');
+document.querySelectorAll('.fchip').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.fchip').forEach(b => b.classList.toggle('active', b === btn));
+  renderWorkouts(btn.dataset.cat);
+}));
+
+let wm = { timer: null, seconds: 0, running: false, exIdx: 0, list: [] };
+window.openWorkout = i => {
+  const w = WORKOUTS[i];
+  wm = { timer: null, seconds: 1200, running: false, exIdx: 0, list: w.exercises };
+  $('#wmTitle').textContent = w.name;
+  renderWorkoutModal();
+  $('#workoutModal').classList.add('open');
+};
+function renderWorkoutModal() {
+  $('#wmTimer').textContent = `${String(Math.floor(wm.seconds / 60)).padStart(2, '0')}:${String(wm.seconds % 60).padStart(2, '0')}`;
+  $('#wmToggle').textContent = wm.running ? 'Pause' : 'Start';
+  $('#wmExList').innerHTML = wm.list.map((e, i) => `<div class="${i < wm.exIdx ? 'done' : i === wm.exIdx ? 'cur' : ''}">${i < wm.exIdx ? '✓ ' : i === wm.exIdx ? '▶ ' : '· '}${e}</div>`).join('');
+}
+window.toggleWorkout = () => {
+  wm.running = !wm.running;
+  clearInterval(wm.timer);
+  if (wm.running) {
+    wm.timer = setInterval(() => {
+      wm.seconds = Math.max(0, wm.seconds - 1);
+      if (wm.seconds % 90 === 0 && wm.exIdx < wm.list.length - 1) wm.exIdx++;
+      if (wm.seconds === 0) { clearInterval(wm.timer); wm.running = false; showToast('🎉 Workout complete! +380 kcal'); wm.exIdx = wm.list.length; closeWorkout(); const s = store.get('streak', 5) + 1; store.set('streak', s); $('#streakDays').textContent = s; return; }
+      renderWorkoutModal();
+    }, 1000);
+  }
+  renderWorkoutModal();
+};
+window.closeWorkout = () => { clearInterval(wm.timer); wm.running = false; $('#workoutModal').classList.remove('open'); };
+
+/* ---------- Nutrition ---------- */
+let cal = store.get('cal', 1240), protein = 78, carbs = 140, fat = 38;
+let meals = store.get('meals', [
+  { name: 'Breakfast — Oats & banana', cal: 420 },
+  { name: 'Lunch — Chicken rice bowl', cal: 640 },
+  { name: 'Post-workout shake', cal: 180 },
+]);
+function renderNutrition() {
+  $('#calNow').textContent = cal; $('#calBar').style.width = Math.min(100, cal / 1800 * 100) + '%';
+  $('#pNow').textContent = protein; $('#pBar').style.width = Math.min(100, protein / 120 * 100) + '%';
+  $('#cNow').textContent = carbs; $('#cBar').style.width = Math.min(100, carbs / 220 * 100) + '%';
+  $('#fNow').textContent = fat; $('#fBar').style.width = Math.min(100, fat / 65 * 100) + '%';
+  $('#mealList').innerHTML = meals.map(m => `<div class="meal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 11h16M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M5 11l1.5 8a2 2 0 0 0 2 1.7h7a2 2 0 0 0 2-1.7L19 11" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>${m.name}</b></div><span class="cal">${m.cal} kcal</span></div>`).join('');
+}
+window.addMeal = type => {
+  const options = { Snack: { name: 'Snack — Greek yogurt & nuts', cal: 220 }, Breakfast: { name: 'Breakfast', cal: 400 }, Lunch: { name: 'Lunch', cal: 600 }, Dinner: { name: 'Dinner', cal: 650 } };
+  const m = options[type] || options.Snack;
+  meals.push(m); cal += m.cal; protein += 12; carbs += 18; fat += 7;
+  store.set('meals', meals); store.set('cal', cal);
+  renderNutrition(); showToast(`Added: ${m.name.split('—')[0].trim()}`);
+};
+renderNutrition();
+
+/* ---------- Progress: chart + BMI ---------- */
+const WDATA = [84.2, 83.4, 83.0, 82.1, 81.3, 80.4, 80.1, 79.6];
+function drawWeight() {
+  const c = $('#weightChart'), ctx = c.getContext('2d');
+  const W = c.width = c.offsetWidth * 2, H = c.height = 150 * 2;
+  ctx.scale(2, 2); const w = c.offsetWidth, h = 150;
+  ctx.clearRect(0, 0, w, h);
+  const min = Math.min(...WDATA) - 0.5, max = Math.max(...WDATA) + 0.5;
+  const px = i => 18 + (i / (WDATA.length - 1)) * (w - 36);
+  const py = v => 18 + (1 - (v - min) / (max - min)) * (h - 40);
+  // gridlines
+  ctx.strokeStyle = '#1b2438'; ctx.lineWidth = 1;
+  for (let g = 0; g <= 3; g++) { const y = 18 + g * ((h - 40) / 3); ctx.beginPath(); ctx.moveTo(10, y); ctx.lineTo(w - 10, y); ctx.stroke(); }
+  // area fill
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, 'rgba(34,197,94,.35)'); grad.addColorStop(1, 'rgba(34,197,94,0)');
+  ctx.beginPath(); ctx.moveTo(px(0), py(WDATA[0]));
+  WDATA.forEach((v, i) => ctx.lineTo(px(i), py(v)));
+  ctx.lineTo(px(WDATA.length - 1), h - 14); ctx.lineTo(px(0), h - 14); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+  // line
+  ctx.beginPath(); WDATA.forEach((v, i) => i ? ctx.lineTo(px(i), py(v)) : ctx.moveTo(px(i), py(v)));
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round'; ctx.stroke();
+  // points + labels
+  WDATA.forEach((v, i) => {
+    ctx.beginPath(); ctx.arc(px(i), py(v), 3.4, 0, 7); ctx.fillStyle = '#0a0f1a'; ctx.fill(); ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.fillStyle = '#8596b8'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center'; ctx.fillText('W' + (i + 1), px(i), h - 2);
+  });
+}
+window.addEventListener('resize', drawWeight);
+window.calcBMI = () => {
+  const w = +$('#bmiW').value, hCm = +$('#bmiH').value;
+  if (!w || !hCm) return;
+  const bmi = w / Math.pow(hCm / 100, 2);
+  let cat, col;
+  if (bmi < 18.5) { cat = 'Underweight'; col = '#fbbf24' } else if (bmi < 25) { cat = 'Normal'; col = '#22c55e' } else if (bmi < 30) { cat = 'Overweight'; col = '#fbbf24' } else { cat = 'Obese'; col = '#f87171' }
+  $('#bmiResult').innerHTML = `BMI: <b style="color:${col}">${bmi.toFixed(1)} — ${cat}</b>`;
+};
+drawWeight(); calcBMI();
+
+/* ---------- AI Coach (scripted) ---------- */
+const COACH_RULES = [
+  { k: ['plateau', 'stuck', 'not losing'], r: "Plateaus usually mean one of three things: hidden calories (liquid ones), poor sleep, or not enough progressive overload. Track everything for 2 weeks — drop 200 kcal or add +2.5 kg on your main lifts, whichever you haven't adjusted. If that doesn't move the needle in 3 weeks, we deload." },
+  { k: ['motivat', 'lazy', "can't", 'quit'], r: "Motivation is weather — discipline is climate. Shrink the win: commit to just putting your shoes on today. Once you're moving, momentum handles the rest. And remember: 5 days of 20 minutes still beats zero days of planning." },
+  { k: ['protein'], r: "Aim for 1.6–2.2 g per kg of bodyweight. At 80 kg you're looking at 128–175 g/day. Anchor every meal with a protein source — chicken, eggs, paneer, lentils — before worrying about carbs." },
+  { k: ['sleep', 'recovery', 'rest'], r: "7–9 hours, same time every day if possible. Sleep is where the adaptation happens — training without recovery isn't training, it's just fatigue. Screens off 45 min before bed." },
+  { k: ['chest', 'bench'], r: "Volume drives size. 10–20 hard sets per muscle per week, progressively loaded. For chest: incline press + flat press + dips cover 90% of it. Eat in a slight surplus or recover well, and stay consistent for 12 weeks before judging." },
+  { k: ['calor', 'deficit', 'lose weight', 'fat'], r: "A 300–500 kcal deficit is the sweet spot — you lose roughly 0.5 kg a week without destroying training performance. Pair it with 2–3 strength sessions weekly to keep the muscle while you drop the fat." },
+  { k: ['water', 'hydrate'], r: "Roughly 33 ml per kg of bodyweight — around 2.6 litres for you. Add 500–750 ml per hour of training. Your 4/8 glasses today is a start — tap the drops on the Home screen to fill them." },
+  { k: ['hiit', 'hiit vs', 'cardio'], r: "HIIT burns more per minute, LISS is easier to recover from. Best move: 2 HIIT sessions + 2 walking sessions per week. Fat loss cares about consistency, not suffering." },
+];
+const DEFAULT_REPLY = "Good question. Quick framework: (1) nail sleep, (2) hit protein, (3) train with progressive overload, (4) walk daily, (5) repeat for 8+ weeks. Most answers live there. Want me to build a specific plan around your goal — fat loss, muscle, or performance?";
+const QUICK = ['How to break a plateau?', 'Protein per day?', 'Fat loss plan', 'I feel unmotivated', 'Best recovery tips'];
+
+const chatBox = $('#chatBox');
+function addBubble(text, who) {
+  const d = document.createElement('div');
+  d.className = 'bubble ' + who; d.textContent = text;
+  chatBox.appendChild(d); chatBox.parentElement.scrollTop = chatBox.parentElement.scrollHeight;
+  return d;
+}
+function coachReply(q) {
+  const typing = document.createElement('div');
+  typing.className = 'bubble coach'; typing.innerHTML = '<span class="typing"><i></i><i></i></span>';
+  chatBox.appendChild(typing); chatBox.parentElement.scrollTop = chatBox.parentElement.scrollHeight;
+  const lower = q.toLowerCase();
+  const rule = COACH_RULES.find(r => r.k.some(k => lower.includes(k)));
+  const reply = rule ? rule.r : DEFAULT_REPLY;
+  setTimeout(() => { typing.remove(); addBubble(reply, 'coach'); }, 900 + Math.random() * 700);
+}
+window.sendChat = e => {
+  e.preventDefault();
+  const input = $('#chatInput'), q = input.value.trim();
+  if (!q) return;
+  addBubble(q, 'you'); input.value = ''; coachReply(q);
+};
+$('#quickChips').innerHTML = QUICK.map(q => `<button class="chip">${q}</button>`).join('');
+$('#quickChips').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; addBubble(c.textContent, 'you'); coachReply(c.textContent); });
+/* ---------- Home: 4-4-4 breathing circle ---------- */
+const breathCircle = document.getElementById('breathCircle');
+const breathPhaseEl = document.getElementById('breathPhase');
+const PHASES = [['INHALE', 'inhale'], ['HOLD', 'hold'], ['EXHALE', 'exhale']];
+let breathOn = false, breathPhase = 0, breathTimer = null;
+function runBreathPhase(i) {
+  const [label, cls] = PHASES[i % 3];
+  breathCircle.className = 'breath ' + cls;
+  breathCircle.textContent = label;
+  breathPhaseEl.textContent = label === 'INHALE' ? 'Breathe in through your nose…' : label === 'HOLD' ? 'Hold gently…' : 'Breathe out slowly…';
+  breathTimer = setTimeout(() => { if (breathOn) runBreathPhase(i + 1); }, 4000);
+}
+breathCircle.addEventListener('click', () => {
+  breathOn = !breathOn;
+  if (!breathOn) {
+    clearTimeout(breathTimer);
+    breathCircle.className = 'breath';
+    breathCircle.innerHTML = 'TAP<br>TO BEGIN';
+    breathPhaseEl.textContent = 'Paused — tap to continue';
+    return;
+  }
+  runBreathPhase(breathPhase++);
+});
+
+addBubble("Hey Rahim! Coach here. I can help with workouts, nutrition, plateaus or motivation — what's on your mind?", 'coach');
+</script>
+</body>
+</html>

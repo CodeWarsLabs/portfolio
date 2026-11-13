@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiddo Learn — Alphabet, Numbers & Animals (Interactive Demo)</title>
+<style>
+:root{--purple:#7c3aed;--pink:#ec4899;--orange:#fb923c;--sky:#38bdf8;--sun:#fde047;--leaf:#4ade80;--ink:#3b0764}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(160deg,#fef3c7 0%,#fce7f3 45%,#ede9fe 100%);font-family:'Comic Sans MS','Segoe UI',cursive,sans-serif;display:flex;justify-content:center;min-height:100vh;padding:16px 10px}
+.app{width:100%;max-width:480px;background:#fffdf5;border-radius:34px;overflow:hidden;box-shadow:0 30px 70px rgba(124,58,237,.25),0 0 0 6px #fff;display:flex;flex-direction:column;height:900px;max-height:96vh;position:relative}
+.ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--orange);color:#4a1d00;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60;opacity:.92}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(90deg,#a78bfa,#f0abfc)}
+.top .logo{display:flex;align-items:center;gap:10px}
+.top b{font-size:24px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.top small{display:block;font-size:10px;color:#f5d0fe;letter-spacing:1.5px;text-transform:uppercase}
+.stars{background:#fff;border-radius:999px;padding:7px 14px;font-weight:900;color:#d97706;font-size:15px;box-shadow:0 3px 0 #fde68a}
+.tabs{display:flex;gap:8px;padding:14px 14px 0}
+.tab{flex:1;border:none;border-radius:18px 18px 0 0;padding:12px 6px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;color:#fff;opacity:.55;transform:translateY(6px);transition:all .3s}
+.tab[data-tab="alphabet"]{background:var(--pink)}
+.tab[data-tab="numbers"]{background:var(--orange)}
+.tab[data-tab="animals"]{background:var(--sky)}
+.tab.active{opacity:1;transform:translateY(0);box-shadow:0 -6px 18px rgba(0,0,0,.12)}
+.screens{flex:1;overflow:hidden;position:relative;background:#fffdf5}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:16px;display:none}
+.screen.active{display:block;animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+h1{font-size:22px;color:var(--ink);margin-bottom:10px;text-align:center}
+.letter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.letter{border:none;aspect-ratio:1;border-radius:22px;font-size:38px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s}
+.letter:active{transform:translateY(4px) scale(.96);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.big-letter{text-align:center;margin:10px 0 16px}
+.big-letter .gl{font-size:110px;font-weight:900;line-height:1;animation:bounce 1.2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.big-letter .word{font-size:22px;color:var(--ink);margin-top:6px}
+.btn{border:none;border-radius:999px;padding:12px 26px;font-size:15px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.btn.pink{background:var(--pink);color:#fff}.btn.orange{background:var(--orange);color:#fff}.btn.purple{background:#a78bfa;color:#fff}.btn.green{background:var(--leaf);color:#063f1c}.btn.blue{background:var(--sky);color:#06293c}
+.count-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;min-height:120px;margin-bottom:10px}
+.apple{font-size:46px;animation:pop .3s ease;cursor:pointer;transition:transform .2s}
+.apple.eaten{transform:scale(0);opacity:0}
+.num-display{text-align:center;font-size:64px;font-weight:900;color:var(--orange);margin:6px 0}
+.num-btns{display:flex;gap:14px;justify-content:center}
+.num-btn{width:64px;height:64px;border-radius:20px;border:none;font-size:30px;font-weight:900;background:#fde68a;color:#7c2d12;cursor:pointer;box-shadow:0 5px 0 #f59e0b}
+.num-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #f59e0b}
+.animals{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acard{background:#fff;border:3px solid #e9d5ff;border-radius:20px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
+.acard:hover{transform:scale(1.03);border-color:#c4b5fd}
+.acard .aemoji{font-size:64px;display:block;animation:sway 2.4s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.acard b{font-size:16px;color:var(--ink);display:block;margin-top:8px}
+.acard.speak{border-color:var(--sky);background:#eff9ff;transform:scale(1.06);box-shadow:0 0 20px rgba(56,189,248,.5)}
+.toast{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:#3b0764;color:#f5d0fe;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.quizbar{background:#fff;border-top:2px solid #f3e8ff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#7c3aed;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="ribbon">DEMO</div>
+  <div class="top">
+    <div class="logo">
+      <svg width="40" height="40" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#fff" opacity=".95"/><path d="M17 30c-4-6-2-14 7-15s14 6 11 14" stroke="#7c3aed" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="19" cy="21" r="1.8" fill="#7c3aed"/><circle cx="29" cy="21" r="1.8" fill="#7c3aed"/><path d="M19 27q5 4 10 0" stroke="#ec4899" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+      <div><b>Kiddo<span style="color:#ede9fe">Learn</span></b><small>Learn · Play · Grow</small></div>
+    </div>
+    <div class="stars">⭐ <span id="starCount">12</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="alphabet">ABC</button>
+    <button class="tab" data-tab="numbers">123</button>
+    <button class="tab" data-tab="animals">Animals</button>
+  </div>
+
+  <div class="screens">
+    <!-- ALPHABET -->
+    <section class="screen active" id="scr-alphabet">
+      <h1>Tap a letter & hear it!</h1>
+      <div class="big-letter"><div class="gl" id="bigLetter" style="color:#ec4899">A</div><div class="word" id="bigWord">A is for Apple 🍎</div></div>
+      <div class="letter-grid" id="letterGrid"></div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section class="screen" id="scr-numbers">
+      <h1>Count the apples!</h1>
+      <div class="count-row" id="appleRow"></div>
+      <div class="num-display" id="numDisplay">?</div>
+      <div class="num-btns">
+        <button class="num-btn" onclick="answerCount(-1)">−</button>
+        <button class="num-btn" style="background:#bfdbfe;color:#1e3a8a;box-shadow:0 5px 0 #3b82f6" onclick="answerCount(0)">0</button>
+        <button class="num-btn" style="background:#fecaca;color:#7f1d1d;box-shadow:0 5px 0 #ef4444" onclick="answerCount(1)">+</button>
+      </div>
+      <p style="text-align:center;margin-top:12px;color:#7c3aed;font-weight:700">Tap + / − to count, then tap the answer you think is right!</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:14px" id="answerRow"></div>
+      <div style="text-align:center;margin-top:16px"><button class="btn orange" onclick="newCountRound()">New Round 🎲</button></div>
+    </section>
+
+    <!-- ANIMALS -->
+    <section class="screen" id="scr-animals">
+      <h1>Tap the animals!</h1>
+      <div class="animals" id="animalGrid"></div>
+      <p style="text-align:center;margin-top:14px;color:#7c3aed;font-weight:700">Each animal says its name out loud 🗣️</p>
+    </section>
+  </div>
+
+  <div class="quizbar"><span>Goal: collect ⭐ stars</span><span id="streakText">Day 3 🔥</span></div>
+  <div class="toast" id="toast">Great job!</div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('kiddo_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('kiddo_' + k, JSON.stringify(v)) };
+const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); };
+let stars = store.get('stars', 12);
+$('#starCount').textContent = stars;
+const addStars = n => { stars += n; store.set('stars', stars); $('#starCount').textContent = stars; };
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  const id = t.dataset.tab;
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'scr-' + id));
+}));
+
+/* ---------- Speech ---------- */
+function speak(text) {
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.82; u.pitch = 1.15; u.lang = 'en-US';
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) { /* speech unavailable */ }
+}
+
+/* ---------- Alphabet ---------- */
+const LETTERS = [
+  ['A', 'Apple', '🍎', '#ec4899'], ['B', 'Ball', '⚽', '#fb923c'], ['C', 'Cat', '🐱', '#a78bfa'], ['D', 'Dog', '🐶', '#38bdf8'],
+  ['E', 'Elephant', '🐘', '#4ade80'], ['F', 'Fish', '🐟', '#f472b6'], ['G', 'Grapes', '🍇', '#c084fc'], ['H', 'Hat', '🎩', '#fbbf24'],
+  ['I', 'Ice cream', '🍦', '#fda4af'], ['J', 'Juice', '🧃', '#fb7185'], ['K', 'Kite', '🪁', '#34d399'], ['L', 'Lion', '🦁', '#fbbf24'],
+  ['M', 'Moon', '🌙', '#818cf8'], ['N', 'Nest', '🪺', '#a3e635'], ['O', 'Orange', '🍊', '#fb923c'], ['P', 'Panda', '🐼', '#94a3b8'],
+  ['Q', 'Queen', '👸', '#f0abfc'], ['R', 'Rabbit', '🐰', '#fda4af'], ['S', 'Sun', '☀️', '#fde047'], ['T', 'Tiger', '🐯', '#fdba74'],
+  ['U', 'Umbrella', '☂️', '#67e8f9'], ['V', 'Violin', '🎻', '#c4b5fd'], ['W', 'Whale', '🐳', '#7dd3fc'], ['X', 'Box', '📦', '#d6d3d1'],
+  ['Y', 'Yacht', '⛵', '#5eead4'], ['Z', 'Zebra', '🦓', '#e7e5e4'],
+];
+$('#letterGrid').innerHTML = LETTERS.map(([l, w, e, c]) => `<button class="letter" style="background:linear-gradient(160deg,${c},${c}cc)" data-l="${l}" data-w="${w}" data-e="${e}">${l}</button>`).join('');
+function showLetter(l, w, e, c) {
+  const gl = $('#bigLetter');
+  gl.textContent = l; gl.style.color = c;
+  $('#bigWord').textContent = `${l} is for ${w} ${e}`;
+}
+$('#letterGrid').addEventListener('click', e => {
+  const b = e.target.closest('.letter'); if (!b) return;
+  const { l, w, e: emoji } = b.dataset;
+  showLetter(l, w, emoji, getComputedStyle(b).background.split(',')[0].replace('linear-gradient(160deg', '').trim());
+  speak(`${l}. ${l} is for ${w}`);
+  addStars(1); showToast(`⭐ Nice! ${l} — ${w}`);
+});
+showLetter('A', 'Apple', '🍎', '#ec4899');
+
+/* ---------- Numbers ---------- */
+let appleCount = 5;
+function newCountRound() {
+  appleCount = 1 + Math.floor(Math.random() * 9);
+  $('#numDisplay').textContent = '?';
+  $('#appleRow').innerHTML = Array.from({ length: appleCount }, () => '<span class="apple">🍎</span>').join('');
+  const wrong1 = Math.max(1, appleCount - 1 - Math.floor(Math.random() * 2));
+  const wrong2 = appleCount + 1 + Math.floor(Math.random() * 2);
+  const options = [...new Set([wrong1, appleCount, wrong2])].sort(() => Math.random() - 0.5);
+  $('#answerRow').innerHTML = options.map(n => `<button class="btn green" style="min-width:74px;font-size:22px" onclick="checkAnswer(${n})">${n}</button>`).join('');
+}
+window.newCountRound = newCountRound;
+window.answerCount = d => { const cur = parseInt($('#numDisplay').textContent) || 0; if ($('#numDisplay').textContent === '?') return; $('#numDisplay').textContent = Math.max(0, Math.min(20, cur + d)); };
+window.checkAnswer = n => {
+  $('#numDisplay').textContent = n;
+  if (n === appleCount) { addStars(2); speak('Correct! Great counting!'); showToast('🎉 Correct! +2 stars'); setTimeout(newCountRound, 1200); }
+  else { speak('Try again!'); showToast('Hmm, count one more time 👀'); }
+};
+newCountRound();
+
+/* ---------- Animals ---------- */
+const ANIMALS = [
+  ['🐶', 'Dog', '#fde68a'], ['🐱', 'Cat', '#fbcfe8'], ['🦁', 'Lion', '#fed7aa'], ['🐘', 'Elephant', '#e2e8f0'],
+  ['🦒', 'Giraffe', '#fef08a'], ['🐸', 'Frog', '#bbf7d0'], ['🐵', 'Monkey', '#d8b4fe'], ['🐰', 'Rabbit', '#fbcfe8'],
+  ['🐻', 'Bear', '#e7e5e4'], ['🐼', 'Panda', '#f1f5f9'], ['🐯', 'Tiger', '#fdba74'], ['🦊', 'Fox', '#fed7aa'],
+];
+$('#animalGrid').innerHTML = ANIMALS.map(([e, n, c]) => `<button class="acard" style="background:${c}" data-name="${n}"><span class="aemoji">${e}</span><b>${n}</b></button>`).join('');
+$('#animalGrid').addEventListener('click', e => {
+  const b = e.target.closest('.acard'); if (!b) return;
+  b.classList.add('speak'); setTimeout(() => b.classList.remove('speak'), 700);
+  speak(b.dataset.name); addStars(1); showToast(`⭐ ${b.dataset.name}!`);
+});
+</script>
+</body>
+</html>
