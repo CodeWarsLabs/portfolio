@@ -3,191 +3,281 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kiddo Learn — Alphabet, Numbers & Animals (Interactive Demo)</title>
+<title>Kids Learning — Numbers, Alphabet, Animals & More (Interactive Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--purple:#7c3aed;--pink:#ec4899;--orange:#fb923c;--sky:#38bdf8;--sun:#fde047;--leaf:#4ade80;--ink:#3b0764}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:linear-gradient(160deg,#fef3c7 0%,#fce7f3 45%,#ede9fe 100%);font-family:'Comic Sans MS','Segoe UI',cursive,sans-serif;display:flex;justify-content:center;min-height:100vh;padding:16px 10px}
-.app{width:100%;max-width:480px;background:#fffdf5;border-radius:34px;overflow:hidden;box-shadow:0 30px 70px rgba(124,58,237,.25),0 0 0 6px #fff;display:flex;flex-direction:column;height:900px;max-height:96vh;position:relative}
-.ribbon{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--orange);color:#4a1d00;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 14px;border-radius:999px;z-index:60;opacity:.92}
-.top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(90deg,#a78bfa,#f0abfc)}
-.top .logo{display:flex;align-items:center;gap:10px}
-.top b{font-size:24px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.15)}
-.top small{display:block;font-size:10px;color:#f5d0fe;letter-spacing:1.5px;text-transform:uppercase}
-.stars{background:#fff;border-radius:999px;padding:7px 14px;font-weight:900;color:#d97706;font-size:15px;box-shadow:0 3px 0 #fde68a}
-.tabs{display:flex;gap:8px;padding:14px 14px 0}
-.tab{flex:1;border:none;border-radius:18px 18px 0 0;padding:12px 6px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;color:#fff;opacity:.55;transform:translateY(6px);transition:all .3s}
-.tab[data-tab="alphabet"]{background:var(--pink)}
-.tab[data-tab="numbers"]{background:var(--orange)}
-.tab[data-tab="animals"]{background:var(--sky)}
-.tab.active{opacity:1;transform:translateY(0);box-shadow:0 -6px 18px rgba(0,0,0,.12)}
-.screens{flex:1;overflow:hidden;position:relative;background:#fffdf5}
-.screen{position:absolute;inset:0;overflow-y:auto;padding:16px;display:none}
-.screen.active{display:block;animation:pop .4s ease}
-@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-h1{font-size:22px;color:var(--ink);margin-bottom:10px;text-align:center}
-.letter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.letter{border:none;aspect-ratio:1;border-radius:22px;font-size:38px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s}
-.letter:active{transform:translateY(4px) scale(.96);box-shadow:0 1px 0 rgba(0,0,0,.18)}
-.big-letter{text-align:center;margin:10px 0 16px}
-.big-letter .gl{font-size:110px;font-weight:900;line-height:1;animation:bounce 1.2s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.big-letter .word{font-size:22px;color:var(--ink);margin-top:6px}
-.btn{border:none;border-radius:999px;padding:12px 26px;font-size:15px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 5px 0 rgba(0,0,0,.15)}
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
-.btn.pink{background:var(--pink);color:#fff}.btn.orange{background:var(--orange);color:#fff}.btn.purple{background:#a78bfa;color:#fff}.btn.green{background:var(--leaf);color:#063f1c}.btn.blue{background:var(--sky);color:#06293c}
-.count-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;min-height:120px;margin-bottom:10px}
-.apple{font-size:46px;animation:pop .3s ease;cursor:pointer;transition:transform .2s}
-.apple.eaten{transform:scale(0);opacity:0}
-.num-display{text-align:center;font-size:64px;font-weight:900;color:var(--orange);margin:6px 0}
-.num-btns{display:flex;gap:14px;justify-content:center}
-.num-btn{width:64px;height:64px;border-radius:20px;border:none;font-size:30px;font-weight:900;background:#fde68a;color:#7c2d12;cursor:pointer;box-shadow:0 5px 0 #f59e0b}
-.num-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #f59e0b}
-.animals{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.acard{background:#fff;border:3px solid #e9d5ff;border-radius:20px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
-.acard:hover{transform:scale(1.03);border-color:#c4b5fd}
-.acard .aemoji{font-size:64px;display:block;animation:sway 2.4s ease-in-out infinite}
-@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-.acard b{font-size:16px;color:var(--ink);display:block;margin-top:8px}
-.acard.speak{border-color:var(--sky);background:#eff9ff;transform:scale(1.06);box-shadow:0 0 20px rgba(56,189,248,.5)}
-.toast{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:#3b0764;color:#f5d0fe;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;white-space:nowrap}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.quizbar{background:#fff;border-top:2px solid #f3e8ff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#7c3aed;font-weight:700}
+:root{--pink:#ff5fa2;--blue:#38b6ff;--orange:#ff8c1a;--green:#2fd05e;--purple:#a259ff;--red:#ff4747;--teal:#12c2c2}
+body{background:#7ec8ff;font-family:'Baloo 2','Comic Sans MS',system-ui,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:12px 8px}
+.app{width:100%;max-width:480px;position:relative;border-radius:30px;overflow:hidden;box-shadow:0 30px 80px rgba(10,60,110,.4),0 0 0 6px #fff;min-height:900px;background:linear-gradient(180deg,#4fb3ff 0%,#7ec8ff 34%,#a8e3ff 62%,#c9f2d6 100%)}
+/* Sky decorations */
+.rainbow{position:absolute;top:-30px;right:-90px;width:330px;height:330px;pointer-events:none}
+.cloud{position:absolute;background:#fff;border-radius:60px;opacity:.95}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud.c1{width:86px;height:26px;top:120px;left:30px;animation:drift 26s linear infinite}
+.cloud.c1::before{width:34px;height:34px;top:-16px;left:12px}.cloud.c1::after{width:26px;height:26px;top:-11px;right:12px}
+.cloud.c2{width:64px;height:20px;top:210px;left:55%;animation:drift 34s linear infinite reverse}
+.cloud.c2::before{width:26px;height:26px;top:-13px;left:8px}.cloud.c2::after{width:20px;height:20px;top:-9px;right:8px}
+@keyframes drift{from{transform:translateX(-60px)}to{transform:translateX(560px)}}
+.sun{position:absolute;top:26px;right:26px;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#fff9c4,#ffd93b 70%);box-shadow:0 0 40px rgba(255,217,59,.9)}
+.hills{position:absolute;bottom:0;left:0;right:0;pointer-events:none}
+/* Top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;position:relative;z-index:2}
+.gear{width:58px;height:58px;border-radius:50%;background:#fff;border:none;cursor:pointer;box-shadow:0 4px 0 rgba(0,60,110,.25);display:flex;align-items:center;justify-content:center}
+.gear svg{width:32px;height:32px;fill:#38b6ff}
+.gear:active{transform:scale(.92)}
+.stars{background:#fff;border-radius:999px;padding:9px 18px;font-weight:800;color:#b45309;font-size:17px;box-shadow:0 4px 0 rgba(0,60,110,.25);display:flex;gap:8px;align-items:center}
+/* Logo */
+.logo{text-align:center;line-height:.95;padding:2px 10px 8px;position:relative;z-index:2}
+.logo .kids{font-size:92px;font-weight:800;letter-spacing:2px;line-height:.95}
+.logo .kids span{display:inline-block;animation:bob 1.6s ease-in-out infinite;text-shadow:0 4px 0 #fff,0 9px 0 rgba(10,50,90,.28)}
+.logo .kids span:nth-child(2n){animation-delay:.22s}.logo .kids span:nth-child(3n){animation-delay:.44s}.logo .kids span:nth-child(4n){animation-delay:.66s}
+.logo .kids span:nth-child(1){color:#ff4747}.logo .kids span:nth-child(2){color:#ff8c1a}.logo .kids span:nth-child(3){color:#ffd93b}.logo .kids span:nth-child(4){color:#2fd05e}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* Grid of modules */
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;padding:2px 16px;position:relative;z-index:2}
+.mod{background:#fff;border:none;border-radius:22px;box-shadow:0 6px 0 rgba(20,70,110,.28);height:150px;cursor:pointer;display:flex;flex-direction:column;overflow:hidden;transition:transform .18s;padding:0}
+.mod:active{transform:translateY(5px) scale(.97);box-shadow:0 1px 0 rgba(20,70,110,.28)}
+.mod-art{flex:1;display:flex;align-items:center;justify-content:center;font-size:44px;padding:8px 4px 0}
+.mod-art.txt{font-size:34px;font-weight:800;letter-spacing:1px}
+.mod-label{color:#fff;font-weight:800;font-size:13.5px;padding:5px 6px;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-number .mod-label{background:#ff6b8a}.m-fruit .mod-label{background:#19a7ff}.m-animal .mod-label{background:#ff8c1a}
+.m-alphabet .mod-label{background:#2fd05e}.m-helpers .mod-label{background:#9acd32}.m-vegetable .mod-label{background:#e11d48}
+.m-vehicle .mod-label{background:#ff5fa2}.m-shape .mod-label{background:#ff8c1a}.m-color .mod-label{background:#a259ff}
+.m-day .mod-label{background:#a259ff}.m-months .mod-label{background:#cd7f32}.m-body .mod-label{background:#12c2c2}
+/* NEW banners */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:12px 16px 18px;position:relative;z-index:2}
+.banner{border:none;border-radius:20px;text-align:left;padding:12px 12px 12px 78px;position:relative;cursor:pointer;box-shadow:0 6px 0 rgba(20,70,110,.28);font-family:inherit;min-height:96px}
+.banner:active{transform:translateY(5px)}
+.banner .art{position:absolute;left:6px;bottom:-4px;font-size:56px;line-height:1}
+.banner b{font-size:17px;display:block;color:#3b0764}
+.banner p{font-size:11px;color:#5b3b8c;margin:2px 0 6px;line-height:1.3}
+.banner .go{position:absolute;right:10px;bottom:10px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.banner.dino{background:#d9c6ff}.banner.dino .go{background:#8b5cf6}
+.banner.parent{background:#ffe9a8}.banner.parent .go{background:#f59e0b}
+.new-badge{position:absolute;top:-10px;left:-8px;background:#ff4747;color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;box-shadow:0 3px 0 #b91c1c;letter-spacing:1px}
+/* Screens overlay */
+.screen{position:absolute;inset:0;background:linear-gradient(180deg,#fff7ed,#ffffff);z-index:30;display:none;flex-direction:column}
+.screen.open{display:flex;animation:fadein .28s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.scr-top{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:2px solid #f3e8ff}
+.backbtn{width:48px;height:48px;border-radius:14px;border:none;background:#f3e8ff;color:#7c3aed;font-size:24px;cursor:pointer}
+.scr-title{font-size:24px;font-weight:800;color:#3b0764}
+.scr-body{flex:1;overflow-y:auto;padding:18px;text-align:center}
+.big-emoji{font-size:96px;line-height:1;margin:18px 0 6px;animation:bigpop .35s ease}
+@keyframes bigpop{0%{transform:scale(.2)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+.item-name{font-size:32px;font-weight:800;color:#3b0764;margin-bottom:14px}
+.navrow{display:flex;gap:12px;justify-content:center;margin-top:8px}
+.bigbtn{border:none;border-radius:16px;padding:13px 26px;font-size:17px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.bigbtn:active{transform:translateY(4px)}
+.bigbtn.purple{background:#8b5cf6}.bigbtn.pink{background:#ff5fa2}.bigbtn.blue{background:#38b6ff}.bigbtn.green{background:#2fd05e;color:#053}
+.speakbtn{margin-top:6px;background:#fde68a;color:#7c2d12;border:none;border-radius:12px;padding:10px 18px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.tap-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}
+.tap-item{border:none;background:#fff;border:2.5px solid #f3e8ff;border-radius:16px;width:104px;padding:10px 6px;cursor:pointer;transition:transform .15s;font-family:inherit}
+.tap-item:active{transform:scale(.93)}
+.tap-item .e{font-size:40px}.tap-item b{font-size:13px;color:#3b0764;display:block;margin-top:4px}
+.quiz-row{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.quiz-opt{border:none;border-radius:16px;padding:12px 18px;font-size:20px;font-weight:800;color:#fff;background:#38b6ff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.16);font-family:inherit}
+.quiz-opt:active{transform:translateY(3px)}
+.count-apples{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:70px;margin:14px 0}
+.count-apples span{font-size:42px;animation:bigpop .3s ease}
+.timer-text{font-size:20px;color:#7c3aed;font-weight:800}
+.settings-sheet{position:absolute;left:0;right:0;bottom:-100%;background:#fff;z-index:40;border-radius:24px 24px 0 0;padding:20px;transition:bottom .3s;box-shadow:0 -10px 40px rgba(0,0,0,.2)}
+.settings-sheet.open{bottom:0}
+.settings-sheet h3{color:#3b0764;margin-bottom:10px}
+.setrow{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #f3e8ff;font-weight:700;color:#4b5563}
+.toggle{width:52px;height:28px;border-radius:999px;border:none;background:#e5e7eb;cursor:pointer;position:relative}
+.toggle::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:4px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle.on{background:#2fd05e}.toggle.on::after{left:26px}
+.toast{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);background:#3b0764;color:#f5d0fe;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:opacity .25s;z-index:50;pointer-events:none}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="ribbon">DEMO</div>
-  <div class="top">
-    <div class="logo">
-      <svg width="40" height="40" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#fff" opacity=".95"/><path d="M17 30c-4-6-2-14 7-15s14 6 11 14" stroke="#7c3aed" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="19" cy="21" r="1.8" fill="#7c3aed"/><circle cx="29" cy="21" r="1.8" fill="#7c3aed"/><path d="M19 27q5 4 10 0" stroke="#ec4899" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
-      <div><b>Kiddo<span style="color:#ede9fe">Learn</span></b><small>Learn · Play · Grow</small></div>
+<div class="app" id="app">
+
+  <!-- Sky decor -->
+  <svg class="rainbow" viewBox="0 0 200 200" fill="none"><path d="M20 180a80 80 0 0 1 160 0" stroke="#ff4747" stroke-width="16"/><path d="M38 180a62 62 0 0 1 124 0" stroke="#ff8c1a" stroke-width="16"/><path d="M56 180a44 44 0 0 1 88 0" stroke="#ffd93b" stroke-width="16"/><path d="M74 180a26 26 0 0 1 52 0" stroke="#2fd05e" stroke-width="16"/><path d="M92 180a8 8 0 0 1 16 0" stroke="#38b6ff" stroke-width="16"/></svg>
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <svg class="hills" viewBox="0 0 480 150" preserveAspectRatio="none"><path d="M0 150 V80 C80 30 160 90 240 55 C330 20 400 85 480 60 V150 Z" fill="#7ddf9e"/><path d="M0 150 V115 C100 80 200 120 300 105 C390 92 440 125 480 110 V150 Z" fill="#5ed07f"/></svg>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="gear" onclick="toggleSettings()" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 .1-2l2-1.5-2-3.4-2.3 1a8.3 8.3 0 0 0-1.7-1L15.2 4h-4l-.4 2.6a8.3 8.3 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7.6 7.6 0 0 0 .1 2l-2 1.5 2 3.4 2.3-1a8.3 8.3 0 0 0 1.7 1l.4 2.6h4l.4-2.6a8.3 8.3 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"/></svg></button>
+    <div class="stars">⭐ <span id="starCount">24</span> stars</div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo"><div class="kids"><span>K</span><span>I</span><span>D</span><span>S</span></div></div>
+
+  <!-- 12 modules -->
+  <div class="grid" id="moduleGrid"></div>
+
+  <!-- NEW banners -->
+  <div class="duo">
+    <button class="banner dino" onclick="openModule('dino')"><span class="new-badge">NEW</span><span class="art">🦕</span><b>Dinosaur World</b><p>Learn with fun dinosaurs!</p><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></button>
+    <button class="banner parent" onclick="openModule('parent')"><span class="new-badge">NEW</span><span class="art">👩‍🏫</span><b>Parent Tutor</b><p>Your personal tutor avatar</p><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></button>
+  </div>
+
+  <!-- Module screen -->
+  <div class="screen" id="moduleScreen">
+    <div class="scr-top">
+      <button class="backbtn" onclick="closeModule()">←</button>
+      <div class="scr-title" id="scrTitle">Module</div>
     </div>
-    <div class="stars">⭐ <span id="starCount">12</span></div>
+    <div class="scr-body" id="scrBody"></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="alphabet">ABC</button>
-    <button class="tab" data-tab="numbers">123</button>
-    <button class="tab" data-tab="animals">Animals</button>
+  <!-- Settings sheet -->
+  <div class="settings-sheet" id="settingsSheet">
+    <h3>⚙️ Settings</h3>
+    <div class="setrow">Sound effects <button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="setrow">Voice narration <button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="setrow">Daily reminder <button class="toggle" onclick="this.classList.toggle('on')"></button></div>
+    <div class="setrow"><span>Difficulty: <b>Easy</b></span><small style="color:#9ca3af">Age 3–6</small></div>
+    <button class="bigbtn purple" style="width:100%;margin-top:12px" onclick="toggleSettings()">Close</button>
   </div>
 
-  <div class="screens">
-    <!-- ALPHABET -->
-    <section class="screen active" id="scr-alphabet">
-      <h1>Tap a letter & hear it!</h1>
-      <div class="big-letter"><div class="gl" id="bigLetter" style="color:#ec4899">A</div><div class="word" id="bigWord">A is for Apple 🍎</div></div>
-      <div class="letter-grid" id="letterGrid"></div>
-    </section>
-
-    <!-- NUMBERS -->
-    <section class="screen" id="scr-numbers">
-      <h1>Count the apples!</h1>
-      <div class="count-row" id="appleRow"></div>
-      <div class="num-display" id="numDisplay">?</div>
-      <div class="num-btns">
-        <button class="num-btn" onclick="answerCount(-1)">−</button>
-        <button class="num-btn" style="background:#bfdbfe;color:#1e3a8a;box-shadow:0 5px 0 #3b82f6" onclick="answerCount(0)">0</button>
-        <button class="num-btn" style="background:#fecaca;color:#7f1d1d;box-shadow:0 5px 0 #ef4444" onclick="answerCount(1)">+</button>
-      </div>
-      <p style="text-align:center;margin-top:12px;color:#7c3aed;font-weight:700">Tap + / − to count, then tap the answer you think is right!</p>
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:14px" id="answerRow"></div>
-      <div style="text-align:center;margin-top:16px"><button class="btn orange" onclick="newCountRound()">New Round 🎲</button></div>
-    </section>
-
-    <!-- ANIMALS -->
-    <section class="screen" id="scr-animals">
-      <h1>Tap the animals!</h1>
-      <div class="animals" id="animalGrid"></div>
-      <p style="text-align:center;margin-top:14px;color:#7c3aed;font-weight:700">Each animal says its name out loud 🗣️</p>
-    </section>
-  </div>
-
-  <div class="quizbar"><span>Goal: collect ⭐ stars</span><span id="streakText">Day 3 🔥</span></div>
-  <div class="toast" id="toast">Great job!</div>
+  <div class="toast" id="toast">Nice!</div>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
-const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('kiddo_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('kiddo_' + k, JSON.stringify(v)) };
-const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); };
-let stars = store.get('stars', 12);
+const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem('kidsapp_' + k)) ?? d; } catch { return d; } }, set: (k, v) => localStorage.setItem('kidsapp_' + k, JSON.stringify(v)) };
+const showToast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); };
+let stars = store.get('stars', 24);
 $('#starCount').textContent = stars;
 const addStars = n => { stars += n; store.set('stars', stars); $('#starCount').textContent = stars; };
+function speak(text, rate = 0.85) { try { const u = new SpeechSynthesisUtterance(text); u.rate = rate; u.pitch = 1.15; u.lang = 'en-US'; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
 
-/* ---------- Tabs ---------- */
-document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
-  const id = t.dataset.tab;
-  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
-  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'scr-' + id));
-}));
-
-/* ---------- Speech ---------- */
-function speak(text) {
-  try {
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.82; u.pitch = 1.15; u.lang = 'en-US';
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
-  } catch (e) { /* speech unavailable */ }
-}
-
-/* ---------- Alphabet ---------- */
-const LETTERS = [
-  ['A', 'Apple', '🍎', '#ec4899'], ['B', 'Ball', '⚽', '#fb923c'], ['C', 'Cat', '🐱', '#a78bfa'], ['D', 'Dog', '🐶', '#38bdf8'],
-  ['E', 'Elephant', '🐘', '#4ade80'], ['F', 'Fish', '🐟', '#f472b6'], ['G', 'Grapes', '🍇', '#c084fc'], ['H', 'Hat', '🎩', '#fbbf24'],
-  ['I', 'Ice cream', '🍦', '#fda4af'], ['J', 'Juice', '🧃', '#fb7185'], ['K', 'Kite', '🪁', '#34d399'], ['L', 'Lion', '🦁', '#fbbf24'],
-  ['M', 'Moon', '🌙', '#818cf8'], ['N', 'Nest', '🪺', '#a3e635'], ['O', 'Orange', '🍊', '#fb923c'], ['P', 'Panda', '🐼', '#94a3b8'],
-  ['Q', 'Queen', '👸', '#f0abfc'], ['R', 'Rabbit', '🐰', '#fda4af'], ['S', 'Sun', '☀️', '#fde047'], ['T', 'Tiger', '🐯', '#fdba74'],
-  ['U', 'Umbrella', '☂️', '#67e8f9'], ['V', 'Violin', '🎻', '#c4b5fd'], ['W', 'Whale', '🐳', '#7dd3fc'], ['X', 'Box', '📦', '#d6d3d1'],
-  ['Y', 'Yacht', '⛵', '#5eead4'], ['Z', 'Zebra', '🦓', '#e7e5e4'],
+/* ============ MODULE DATA ============ */
+const MODULES = [
+  { id: 'number', art: '<span class="txt"><span style="color:#38b6ff">1</span><span style="color:#a259ff">2</span><span style="color:#ff5fa2">3</span></span>', label: 'NUMBER', cls: 'm-number' },
+  { id: 'fruit', art: '🍓🍍🍎', label: 'FRUIT', cls: 'm-fruit' },
+  { id: 'animal', art: '🐯🐘🦁', label: 'ANIMAL', cls: 'm-animal' },
+  { id: 'alphabet', art: '<span class="txt"><span style="color:#ff4747">A</span><span style="color:#38b6ff">B</span><span style="color:#2fd05e">C</span></span>', label: 'ALPHABET', cls: 'm-alphabet' },
+  { id: 'helpers', art: '👮🪖👩‍⚕️', label: 'Community Helpers', cls: 'm-helpers' },
+  { id: 'vegetable', art: '🍅🍆🥔', label: 'Vegetable', cls: 'm-vegetable' },
+  { id: 'vehicle', art: '✈️🚙🚲', label: 'Vehicle', cls: 'm-vehicle' },
+  { id: 'shape', art: '🔵🔺🟣', label: 'Shape', cls: 'm-shape' },
+  { id: 'color', art: '🌈', label: 'Color', cls: 'm-color' },
+  { id: 'day', art: '<span style="font-size:16px;line-height:1.35;text-align:center"><span style="color:#38b6ff;font-weight:800">Sunday</span><br><span style="color:#ff5fa2;font-weight:800">Monday</span><br><span style="color:#2fd05e;font-weight:800">Tuesday</span></span>', label: 'Day', cls: 'm-day' },
+  { id: 'months', art: '<span style="font-size:14px;line-height:1.4;text-align:center"><span style="color:#38b6ff;font-weight:800">January</span><br><span style="color:#ff5fa2;font-weight:800">February</span><br><span style="color:#ff8c1a;font-weight:800">March</span></span>', label: 'Months', cls: 'm-months' },
+  { id: 'body', art: '🖐️👀👃', label: 'Body Part', cls: 'm-body' },
 ];
-$('#letterGrid').innerHTML = LETTERS.map(([l, w, e, c]) => `<button class="letter" style="background:linear-gradient(160deg,${c},${c}cc)" data-l="${l}" data-w="${w}" data-e="${e}">${l}</button>`).join('');
-function showLetter(l, w, e, c) {
-  const gl = $('#bigLetter');
-  gl.textContent = l; gl.style.color = c;
-  $('#bigWord').textContent = `${l} is for ${w} ${e}`;
-}
-$('#letterGrid').addEventListener('click', e => {
-  const b = e.target.closest('.letter'); if (!b) return;
-  const { l, w, e: emoji } = b.dataset;
-  showLetter(l, w, emoji, getComputedStyle(b).background.split(',')[0].replace('linear-gradient(160deg', '').trim());
-  speak(`${l}. ${l} is for ${w}`);
-  addStars(1); showToast(`⭐ Nice! ${l} — ${w}`);
-});
-showLetter('A', 'Apple', '🍎', '#ec4899');
+$('#moduleGrid').innerHTML = MODULES.map(m => `<button class="mod ${m.cls}" onclick="openModule('${m.id}')"><span class="mod-art ${m.art.includes('<span') ? 'txt' : ''}">${m.art}</span><span class="mod-label">${m.label}</span></button>`).join('');
 
-/* ---------- Numbers ---------- */
-let appleCount = 5;
-function newCountRound() {
-  appleCount = 1 + Math.floor(Math.random() * 9);
-  $('#numDisplay').textContent = '?';
-  $('#appleRow').innerHTML = Array.from({ length: appleCount }, () => '<span class="apple">🍎</span>').join('');
-  const wrong1 = Math.max(1, appleCount - 1 - Math.floor(Math.random() * 2));
-  const wrong2 = appleCount + 1 + Math.floor(Math.random() * 2);
-  const options = [...new Set([wrong1, appleCount, wrong2])].sort(() => Math.random() - 0.5);
-  $('#answerRow').innerHTML = options.map(n => `<button class="btn green" style="min-width:74px;font-size:22px" onclick="checkAnswer(${n})">${n}</button>`).join('');
-}
-window.newCountRound = newCountRound;
-window.answerCount = d => { const cur = parseInt($('#numDisplay').textContent) || 0; if ($('#numDisplay').textContent === '?') return; $('#numDisplay').textContent = Math.max(0, Math.min(20, cur + d)); };
-window.checkAnswer = n => {
-  $('#numDisplay').textContent = n;
-  if (n === appleCount) { addStars(2); speak('Correct! Great counting!'); showToast('🎉 Correct! +2 stars'); setTimeout(newCountRound, 1200); }
-  else { speak('Try again!'); showToast('Hmm, count one more time 👀'); }
+/* ============ CONTENT ============ */
+const CONTENT = {
+  fruit: { title: '🍓 Fruits', items: [ ['🍎','Apple'],['🍌','Banana'],['🍍','Pineapple'],['🍓','Strawberry'],['🍇','Grapes'],['🥭','Mango'],['🍉','Watermelon'],['🍊','Orange'] ] },
+  animal: { title: '🐯 Animals', items: [ ['🐶','Dog'],['🐱','Cat'],['🦁','Lion'],['🐘','Elephant'],['🐯','Tiger'],['🦒','Giraffe'],['🐸','Frog'],['🐵','Monkey'],['🐻','Bear'],['🐰','Rabbit'],['🦊','Fox'],['🐼','Panda'] ] },
+  vegetable: { title: '🍅 Vegetables', items: [ ['🍅','Tomato'],['🍆','Eggplant'],['🥔','Potato'],['🥕','Carrot'],['🧅','Onion'],['🥦','Broccoli'],['🌽','Corn'],['🥒','Cucumber'] ] },
+  vehicle: { title: '🚗 Vehicles', items: [ ['🚗','Car'],['🚌','Bus'],['✈️','Airplane'],['🚲','Bicycle'],['🚂','Train'],['🚁','Helicopter'],['🛳️','Ship'],['🏍️','Motorcycle'] ] },
+  helpers: { title: '👮 Community Helpers', items: [ ['👮','Police Officer'],['👨‍🚒','Firefighter'],['👩‍⚕️','Doctor'],['👩‍🏫','Teacher'],['🪖','Soldier'],['👨‍✈️','Pilot'],['🧑‍🌾','Farmer'],['👩‍🍳','Chef'] ] },
+  body: { title: '✋ Body Parts', items: [ ['🖐️','Hand'],['👀','Eyes'],['👃','Nose'],['👄','Mouth'],['👂','Ears'],['🦵','Legs'],['🦶','Feet'],['💇','Hair'] ] },
+  shape: { title: '🔵 Shapes', items: [ ['🔵','Circle'],['🔻','Triangle'],['🟣','Square'],['⭐','Star'],['❤️','Heart'],['🔶','Diamond'] ] },
+  color: { title: '🌈 Colors', items: [ ['🔴','Red'],['🟠','Orange'],['🟡','Yellow'],['🟢','Green'],['🔵','Blue'],['🟣','Purple'],['🟤','Brown'],['⚫','Black'],['⚪','White'],['🩷','Pink'] ] },
+  day: { title: '📅 Days of the Week', items: [ ['1️⃣','Sunday'],['2️⃣','Monday'],['3️⃣','Tuesday'],['4️⃣','Wednesday'],['5️⃣','Thursday'],['6️⃣','Friday'],['7️⃣','Saturday'] ] },
+  months: { title: '🗓️ Months of the Year', items: [ ['1️⃣','January'],['2️⃣','February'],['3️⃣','March'],['4️⃣','April'],['5️⃣','May'],['6️⃣','June'],['7️⃣','July'],['8️⃣','August'],['9️⃣','September'],['🔟','October'],['1️⃣1️⃣','November'],['1️⃣2️⃣','December'] ] },
+  dino: { title: '🦕 Dinosaur World', items: [ ['🦕','Brontosaurus — long neck, gentle giant'],['🦖','T-Rex — tiny arms, huge bite!'],['🦕','Stegosaurus — spiky tail, plates on back'],['🦖','Velociraptor — fast and smart hunter'],['🦕','Triceratops — three horns, strong shield'],['🦖','Pterodactyl — flying dinosaur'] ] },
 };
-newCountRound();
+const ALPHABET = [ ['A','Apple'],['B','Ball'],['C','Cat'],['D','Dog'],['E','Elephant'],['F','Fish'],['G',' Grapes'],['H','Hat'],['I','Ice cream'],['J','Juice'],['K','Kite'],['L','Lion'],['M','Moon'],['N','Nest'],['O','Orange'],['P','Panda'],['Q','Queen'],['R','Rabbit'],['S','Sun'],['T','Tiger'],['U','Umbrella'],['V','Violin'],['W','Whale'],['X','Box'],['Y','Yacht'],['Z','Zebra'] ];
 
-/* ---------- Animals ---------- */
-const ANIMALS = [
-  ['🐶', 'Dog', '#fde68a'], ['🐱', 'Cat', '#fbcfe8'], ['🦁', 'Lion', '#fed7aa'], ['🐘', 'Elephant', '#e2e8f0'],
-  ['🦒', 'Giraffe', '#fef08a'], ['🐸', 'Frog', '#bbf7d0'], ['🐵', 'Monkey', '#d8b4fe'], ['🐰', 'Rabbit', '#fbcfe8'],
-  ['🐻', 'Bear', '#e7e5e4'], ['🐼', 'Panda', '#f1f5f9'], ['🐯', 'Tiger', '#fdba74'], ['🦊', 'Fox', '#fed7aa'],
+let currentItem = 0, currentModule = null;
+
+window.openModule = function (id) {
+  currentModule = id; currentItem = 0;
+  const scr = $('#moduleScreen'); scr.classList.add('open');
+  renderModule();
+};
+window.closeModule = () => $('#moduleScreen').classList.remove('open');
+window.toggleSettings = () => $('#settingsSheet').classList.toggle('open');
+
+function renderModule() {
+  const id = currentModule, body = $('#scrBody');
+
+  /* Alphabet — letters grid + speak */
+  if (id === 'alphabet') {
+    $('#scrTitle').textContent = '🔤 Alphabet';
+    body.innerHTML = `<p style="color:#7c3aed;font-weight:700;margin-bottom:10px">Tap any letter and hear it!</p>
+      <div class="tap-grid">${ALPHABET.map(([l, w]) => `<button class="tap-item" onclick="speak('${l}. ${l} is for ${w.trim()}')"><span class="e" style="font-weight:800;color:#a259ff">${l}</span><b>${l} — ${w.trim()}</b></button>`).join('')}</div>
+      <button class="bigbtn purple" style="margin-top:16px" onclick="addStars(3); showToast('⭐ +3 stars!')">I learned them! 🎉</button>`;
+    return;
+  }
+
+  /* Numbers — counting game */
+  if (id === 'number') {
+    $('#scrTitle').textContent = '1️⃣2️⃣3️⃣ Numbers';
+    body.innerHTML = `<p style="color:#7c3aed;font-weight:700">How many apples? 🍎</p>
+      <div class="count-apples" id="appleRow"></div>
+      <div class="timer-text">Count them, then tap the right number!</div>
+      <div class="quiz-row" id="numberChoices" style="margin-top:14px"></div>
+      <button class="bigbtn blue" style="margin-top:16px" onclick="numberRound()">New Round 🍎</button>`;
+    numberRound();
+    return;
+  }
+
+  /* Parent — tutor chat */
+  if (id === 'parent') {
+    $('#scrTitle').textContent = '👩‍🏫 Parent Tutor';
+    body.innerHTML = `<div style="font-size:80px;margin:6px 0">👩‍🏫</div>
+      <b style="font-size:19px;color:#3b0764">Hi! I'm Maya, your child's tutor.</b>
+      <p style="color:#6b7280;margin:10px 4px;line-height:1.6">Ask me anything — daily routine, study plan, bedtime lessons, or which module to explore next.</p>
+      <div id="parentChat" style="text-align:left;background:#f3e8ff;border-radius:16px;padding:12px;min-height:90px;margin:10px 0;font-size:14px;color:#3b0764;line-height:1.6"></div>
+      <div style="display:flex;gap:8px"><input id="parentInput" placeholder="e.g. How much study time?" style="flex:1;border:2px solid #e9d5ff;border-radius:12px;padding:12px;font-size:14px;font-family:inherit"><button class="bigbtn purple" onclick="parentAsk()">Ask</button></div>`;
+    $('#parentChat').textContent = 'Maya: Welcome! Try "How much study time?" 🙂';
+    return;
+  }
+
+  /* Generic flashcard modules */
+  const mod = CONTENT[id]; if (!mod) return;
+  $('#scrTitle').textContent = mod.title;
+  const [emoji, name] = mod.items[currentItem];
+  body.innerHTML = `<div class="big-emoji">${emoji}</div>
+    <div class="item-name">${name}</div>
+    <button class="speakbtn" onclick="speak('${name.replace(/'/g, "\\'")}')">🔊 Hear it</button>
+    <div class="navrow">
+      <button class="bigbtn pink" onclick="stepItem(-1)">← Back</button>
+      <button class="bigbtn green" onclick="stepItem(1)">Next →</button>
+    </div>
+    <p style="margin-top:14px;color:#a78bfa;font-weight:700">Card ${currentItem + 1} of ${mod.items.length}</p>
+    <button class="bigbtn purple" style="margin-top:6px" onclick="addStars(2); showToast('⭐ +2 stars!')">I know this one! 🎉</button>`;
+  speak(typeof name === 'string' ? name.split(' — ')[0] : name);
+}
+
+window.stepItem = d => { const mod = CONTENT[currentModule]; if (!mod) return; currentItem = (currentItem + d + mod.items.length) % mod.items.length; renderModule(); };
+
+/* Numbers game */
+window.numberRound = function () {
+  const n = 1 + Math.floor(Math.random() * 10);
+  window._answer = n;
+  $('#appleRow').innerHTML = Array.from({ length: n }, () => '<span>🍎</span>').join('');
+  const wrong1 = Math.max(1, n - 1), wrong2 = n + 1;
+  const opts = [n, wrong1, wrong2].sort(() => Math.random() - 0.5);
+  $('#numberChoices').innerHTML = opts.map(o => `<button class="quiz-opt" onclick="checkNumber(${o})">${o}</button>`).join('');
+};
+window.checkNumber = n => {
+  if (n === window._answer) { addStars(3); showToast('🎉 Correct! +3 stars'); speak('Correct! Great counting!'); setTimeout(numberRound, 1100); }
+  else { showToast('Try again 👀'); speak('Try again'); }
+};
+
+/* Parent tutor chat */
+const TUTOR_FAQ = [
+  { k: ['time', 'how long', 'study'], a: 'Keep sessions to 10–15 minutes at ages 3–6, twice a day max. Short and fun beats long and forced. Follow their attention, not the clock.' },
+  { k: ['routine', 'schedule', 'daily'], a: 'Morning: one alphabet letter + one shape, 10 min. Evening: review stars, one animal or fruit, 8 min. Weekend: Dinosaur World as a treat — they love it.' },
+  { k: ['bed', 'sleep', 'night'], a: 'Wind down with 10 minutes of Body Parts + calm breathing. No screens in the last 30 minutes — a paper book instead.' },
+  { k: ['reward', 'star', 'motivat'], a: 'Stars work because kids love visible progress. Celebrate the streak, not perfection. 24 stars already — 3 more unlocks the full ABC set!' },
+  { k: ['focus', 'attention', 'cant focus', 'concentrate'], a: 'If focus fades, switch modules — Movement between Alphabet and Animals resets attention fast. Sit with them for the first week so the app becomes bonding time.' },
 ];
-$('#animalGrid').innerHTML = ANIMALS.map(([e, n, c]) => `<button class="acard" style="background:${c}" data-name="${n}"><span class="aemoji">${e}</span><b>${n}</b></button>`).join('');
-$('#animalGrid').addEventListener('click', e => {
-  const b = e.target.closest('.acard'); if (!b) return;
-  b.classList.add('speak'); setTimeout(() => b.classList.remove('speak'), 700);
-  speak(b.dataset.name); addStars(1); showToast(`⭐ ${b.dataset.name}!`);
-});
+window.parentAsk = function () {
+  const input = $('#parentInput'), q = input.value.trim(); if (!q) return;
+  const lower = q.toLowerCase();
+  const hit = TUTOR_FAQ.find(f => f.k.some(k => lower.includes(k)));
+  $('#parentChat').innerHTML = `<b style="color:#7c3aed">You:</b> ${q}<br><b style="color:#9333ea">Maya:</b> ${hit ? hit.a : 'Great question! Start with one alphabet letter and one shape daily — consistency beats intensity at this age. Want a full weekly plan? Try the words "routine" or "study time".'}`;
+  input.value = '';
+};
 </script>
 </body>
 </html>
